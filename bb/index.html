@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My IDE has no file tree. It has a tree of agents. | Provectus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1c1f2e; --ink-700:#313449; --ink-400:#5d6076; --ink-200:#a3a5b5; --ink-100:#d4d5df;
+    --bone:#ffffff; --cream:#fdf8f4; --sage-600:#3b5249; --sage-400:#6b8b7b; --sage-100:#dce8e2; --sage-50:#eef3f0;
+    --sienna:#d97f4a; --sienna-600:#b33a22; --gray:#82827a; --gray-dark:#4a4a43;
+    --sans:"Inter",system-ui,sans-serif; --display:"DM Serif Display",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  header.site{border-bottom:1px solid var(--ink-100);padding:16px 0}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600)}
+  .brand span{color:var(--ink-400)}
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--sage-600);margin:40px 0 8px}
+  h1{font-family:var(--display);font-weight:400;font-size:44px;line-height:1.1;margin:0 0 16px;letter-spacing:-.01em}
+  .dek{font-size:20px;color:var(--gray-dark);margin:0 0 20px;line-height:1.45}
+  .byline{font-family:var(--mono);font-size:13px;color:var(--ink-400);border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:10px 0;margin:0 0 40px}
+  h2{font-family:var(--display);font-weight:400;font-size:28px;margin:48px 0 12px;line-height:1.2}
+  p{margin:0 0 18px}
+  ul{padding-left:20px;margin:0 0 18px}
+  li{margin:0 0 8px}
+  strong{font-weight:600}
+  figure{margin:28px 0;padding:20px;background:var(--cream);border:1px solid var(--ink-100);border-radius:6px}
+  figcaption{font-family:var(--mono);font-size:12px;color:var(--ink-400);margin-top:10px;line-height:1.5}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 28px}
+  .kpi{border:1px solid var(--ink-100);border-radius:6px;padding:14px 16px;background:var(--bone)}
+  .kpi b{display:block;font-family:var(--display);font-size:34px;line-height:1;color:var(--sienna-600);font-weight:400}
+  .kpi small{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-400);margin-top:6px;line-height:1.4}
+  .canvas-wrap{position:relative;height:260px}
+  .diagram{font-family:var(--mono);font-size:12.5px;line-height:1.5;white-space:pre;overflow-x:auto;color:var(--ink-700);margin:0}
+  svg text{font-family:var(--sans);font-size:12px;fill:var(--ink)}
+  svg .mono{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  .pull{border-left:0;border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:14px 0;margin:28px 0;font-family:var(--display);font-size:24px;line-height:1.3;color:var(--sage-600)}
+  footer.site{border-top:1px solid var(--ink-100);margin-top:64px;padding:20px 0 48px;font-family:var(--mono);font-size:12px;color:var(--ink-400);line-height:1.6}
+  @media (max-width:640px){h1{font-size:34px}.kpis{grid-template-columns:1fr}}
+  /* shared additions, pm-1029 visuals pass: same block in all four articles */
+  a{color:var(--sienna-600)}
+  code{font-family:var(--mono);font-size:14.5px;background:var(--cream);border:1px solid var(--ink-100);padding:0 4px;border-radius:3px}
+  h2 .num,h2 .n{font-family:var(--mono);font-size:15px;color:var(--sienna-600);margin-right:10px;vertical-align:3px}
+  figure .wide svg{display:block;width:100%;height:auto}
+  figure .fig-k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin:0 0 12px}
+  svg .m{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  svg .b{font-weight:600}
+  svg .hdr{font-family:var(--mono);font-size:10px;letter-spacing:.08em;fill:var(--ink-400)}
+  svg .acc{fill:var(--sienna-600)}
+  svg .big{font-family:var(--display);font-size:30px}
+  svg .mid{font-family:var(--display);font-size:20px}
+  table.t{width:100%;border-collapse:collapse;font-size:15px}
+  table.t th,table.t td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--ink-100)}
+  table.t th:first-child,table.t td:first-child{text-align:left}
+  table.t th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-400);font-weight:400}
+  footer.site ul{padding-left:18px;margin:8px 0 0}
+  footer.site code{font-size:11.5px}
+  .takeaway{font-size:19px;line-height:1.5;color:var(--ink);background:var(--sage-50);border-left:3px solid var(--sage-600);padding:16px 20px;margin:-24px 0 36px}.takeaway b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600);margin-bottom:6px;font-weight:700}.note{font-family:var(--mono);font-size:13px;color:var(--ink-400)}
+  .takeaways{border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:18px 0 8px;margin:36px 0}
+  .takeaways .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sienna-600);margin:0 0 14px}
+  .takeaways ol{list-style:none;padding:0;margin:0;counter-reset:t}
+  .takeaways li{counter-increment:t;position:relative;padding-left:40px;margin:0 0 14px;font-family:var(--display);font-size:21px;line-height:1.32;color:var(--ink)}
+  .takeaways li::before{content:counter(t,decimal-leading-zero);position:absolute;left:0;top:5px;font-family:var(--mono);font-size:12px;color:var(--sienna-600)}
+  @media (max-width:640px){figure{padding:14px}figure .wide{overflow-x:auto;-webkit-overflow-scrolling:touch}figure .wide svg{width:640px;max-width:none}.takeaways li{font-size:19px}table.t{font-size:13px}table.t th,table.t td{padding:6px 4px}table.t th{font-size:9.5px;letter-spacing:.02em}figure:has(.wide) figcaption::before{content:"Swipe the figure sideways. ";color:var(--sienna-600)}}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><div class="brand">Provectus <span>/ Engineering notes</span></div></div></header>
+<main class="wrap">
+  <div class="eyebrow">Building with agents</div>
+  <h1>My IDE has no file tree. It has a tree of agents.</h1>
+  <p class="dek">I work in an agentic IDE where the sidebar is a tree of owners. Here is how I see, steer and audit hundreds of agent threads a month, and what still breaks.</p>
+  <div class="byline">Sasha Demin · Provectus · 2026-11-09 · 6 min read</div>
+  <div class="takeaway"><b>Key takeaway</b> I organise my agents as a tree of owners instead of a tree of files, so I can always see who is doing what and stop the wrong thing early. I steer live work, give every writer its own checkout and archive each day, so the tree I look at is always today's.</div>
+  <p class="note">All numbers come from read-only bb commands on my machine, read on 2026-10-29. "30 days" means threads created 2026-09-29 to 2026-10-28. The commands are listed at the end.</p>
+  <p>When I run a fleet of AI agents, the hard part moves from writing code to knowing who is doing what, and stopping the wrong thing before it reaches a client's repository. This piece is for tech leads and delivery heads who have reached that point. My answer was to change what my IDE shows me. I work in bb (getbb.app), a third-party agentic IDE where the left sidebar is a tree of agent threads, not a tree of files.</p>
+  <p>In 30 days on a parametric reinsurance client, I ran 596 threads in my sidebar, a median of 20 a day over the 27 days with any. I talk to one of them. The board those threads work from has marked 364 cards done since it started on 2026-09-28, and 349 of them carry a quoted command as evidence. These are my numbers from one setup, not a benchmark. The practices should transfer to other tools, though I have only run them in bb: organise by owner, give every writer its own checkout, steer live work, archive daily.</p>
+  <div class="kpis">
+    <div class="kpi"><b>596</b><small>agent threads in my sidebar, created 2026-09-29 to 2026-10-28; median 20 a day over 27 active days</small></div>
+    <div class="kpi"><b>349 / 364</b><small>done cards on the task board that carry a quoted command as evidence, board start 2026-09-28 to 2026-10-29</small></div>
+    <div class="kpi"><b>3.8 h</b><small>median life of an archived Director thread (n=391); standing peers about 24 h</small></div>
+  </div>
+
+    <figure>
+    <div class="canvas-wrap" style="height:240px"><canvas id="daily"></canvas></div>
+    <figcaption>Threads created per day, 29 Sep to 28 Oct 2026 (UTC), by role: 410 Directors, 81 standing peers, 105 other; n=596. Source: bb thread list --json, archived included (visuals_data.py).</figcaption>
+  </figure>
+
+<h2><span class="num">01</span>The sidebar is the org chart</h2>
+  <p>I know a file tree answers "where is the code". I need my sidebar to answer my actual questions instead. Who owns this? Is it running? Is it stuck? What did it finish?</p>
+  <p>My tree has three levels.</p>
+  <p>At the top sit the standing peers, each a thread that lives for one working day. The Project Manager owns the task board and is the only thread allowed to message a person. The Coordinator owns the live engineering work. The Teacher turns every correction into a rule or a check. The Researcher reads sources in full before a decision. The Communicator frames every message that leaves the fleet. They are peers, not parent and child, so archiving one does not archive the others.</p>
+  <p>Under the peers sit Directors, each owning one unit of work: a pull request, a review fix, a release. A Director plans, spawns the feature sessions that do the building, and reports up.</p>
+  <figure>
+    <div class="wide"><svg viewBox="0 0 700 355" width="100%" role="img" aria-label="Schematic of the bb sidebar: pinned standing threads, sections holding Directors and feature sessions, archived threads"><rect x="10" y="10" width="370" height="335" rx="6" fill="#fdf8f4" stroke="#d4d5df"/><text x="26" y="36" class="hdr">PINNED</text><circle cx="29" cy="50" r="3" fill="#313449"/><text x="38" y="54">PM · 1029 · merge train + board<tspan class="mono" dx="6">(running)</tspan></text><circle cx="29" cy="74" r="3" fill="#313449"/><text x="38" y="78">Coordinator · 1029 · merge wave<tspan class="mono" dx="6">(running)</tspan></text><circle cx="29" cy="98" r="3" fill="#313449"/><text x="38" y="102">Teacher · 1029 · review-gate lessons<tspan class="mono" dx="6">(running)</tspan></text><text x="26" y="136" class="hdr">SECTIONS</text><path d="M28,150 l5,4 l-5,4" fill="none" stroke="#5d6076" stroke-width="1.2"/><circle cx="43" cy="154" r="3" fill="#313449"/><text x="52" y="158">Director · golden set · fix wave<tspan class="mono" dx="6">(running)</tspan></text><circle cx="61" cy="178" r="3" fill="#313449"/><text x="70" y="182">golden · Feature · scorer fix<tspan class="mono" dx="6">(starting)</tspan></text><path d="M28,198 l5,4 l-5,4" fill="none" stroke="#5d6076" stroke-width="1.2"/><circle cx="43" cy="202" r="3" fill="#313449"/><text x="52" y="206">Director · review fix · PR rework<tspan class="mono" dx="6">(review requested)</tspan></text><path d="M28,222 l5,4 l-5,4" fill="none" stroke="#5d6076" stroke-width="1.2"/><circle cx="43" cy="226" r="3" fill="#a3a5b5"/><text x="52" y="230">Director · release · pin bump<tspan class="mono" dx="6">(parked: host load)</tspan></text><path d="M28,246 l5,4 l-5,4" fill="none" stroke="#5d6076" stroke-width="1.2"/><circle cx="43" cy="250" r="3" fill="#313449"/><text x="52" y="254">Director · stall sweep<tspan class="mono" dx="6">(running)</tspan></text><text x="26" y="288" class="hdr">ARCHIVED</text><text x="40" y="310" class="mono">574 of 596 threads from the last 30 days</text><text x="40" y="328" class="mono">history kept, out of the sidebar</text><line x1="384" y1="74" x2="420" y2="74" stroke="#a3a5b5"/><text x="426" y="78" class="mono">standing peers: one per day, pinned</text><line x1="384" y1="154" x2="420" y2="154" stroke="#a3a5b5"/><text x="426" y="158" class="mono">one section per Director</text><line x1="384" y1="178" x2="420" y2="178" stroke="#a3a5b5"/><text x="426" y="182" class="mono">feature session: own worktree</text><line x1="384" y1="226" x2="420" y2="226" stroke="#a3a5b5"/><text x="426" y="230" class="mono">status lives in the title</text><line x1="384" y1="306" x2="420" y2="306" stroke="#a3a5b5"/><text x="426" y="310" class="mono">yesterday, archived each morning</text></svg></div>
+    <figcaption>Schematic of my bb sidebar on a working day (redrawn, titles generalised). Pinned peers on top, one section per Director, archived threads out of view. Source: the live sidebar on 2026-10-29; the 574 from bb thread list --json.</figcaption>
+  </figure>
+  <p>Of the 596 threads, 410 were Directors, 409 of them with a parent, and 81 were standing peers. The other 105 were feature sessions, scheduled monitor runs, probes and one-off lanes.</p>
+  <figure>
+    <div class="canvas-wrap"><canvas id="roles"></canvas></div>
+    <figcaption>Threads created 2026-09-29 to 2026-10-28 by role, read from bb thread list --json with archived threads included; role from the title prefix. n=596.</figcaption>
+  </figure>
+
+  <h2><span class="num">02</span>Pins, sections, one worktree per writer</h2>
+  <p>I pin the standing threads at the top; today that is the PM, the Coordinator and the Teacher. I use sections to group a Director with everything it spawned. 500 of the 596 threads sat in a section, so a whole topic folds into one row. Directors end their titles with their current status, such as "(review requested)" or "(parked: host load)", so a folded row still shows the last status they reported.</p>
+  <p>I keep writers apart with worktrees. bb can give a thread its own git worktree: a separate checkout of the repository on its own branch. My rule is that two agents that write never share a checkout. 93 of the 596 threads got their own worktree.</p>
+  <figure>
+    <div class="fig-k">The tree, the checkouts and the shared state</div>
+    <div class="wide"><svg viewBox="0 0 720 330" width="100%" role="img" aria-label="Five pinned standing peers; Directors under the Coordinator; feature sessions in their own worktrees; a shared task board and memory">
+      <defs><marker id="bt" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs><defs><marker id="bs" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#b33a22"/></marker></defs>
+      <text x="20" y="20" class="hdr">STANDING PEERS · ONE PER DAY · NOT PARENT AND CHILD</text>
+      <text x="20" y="146" class="hdr">DIRECTORS</text><text x="20" y="160" class="hdr">409 OF 410 HAVE A PARENT</text>
+      <text x="20" y="236" class="hdr">FEATURE SESSIONS</text><text x="20" y="250" class="hdr">ONE WORKTREE EACH</text>
+      <text x="20" y="278" class="hdr">SHARED BY EVERY THREAD</text>
+      <rect x="20" y="30" width="128" height="44" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="84" y="51" text-anchor="middle" class="b">Project Manager</text><text x="84" y="66" text-anchor="middle" class="m">messages people</text>
+      <rect x="158" y="30" width="128" height="44" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="222" y="51" text-anchor="middle" class="b">Coordinator</text><text x="222" y="66" text-anchor="middle" class="m">pinned</text>
+      <rect x="296" y="30" width="128" height="44" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="360" y="51" text-anchor="middle" class="b">Teacher</text><text x="360" y="66" text-anchor="middle" class="m">pinned</text>
+      <rect x="434" y="30" width="128" height="44" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="498" y="51" text-anchor="middle" class="b">Researcher</text><text x="498" y="66" text-anchor="middle" class="m">pinned</text>
+      <rect x="572" y="30" width="128" height="44" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="636" y="51" text-anchor="middle" class="b">Communicator</text><text x="636" y="66" text-anchor="middle" class="m">pinned</text>
+      <line x1="222" y1="74" x2="320" y2="128" stroke="#5d6076" marker-end="url(#bt)"/>
+      <rect x="250" y="130" width="140" height="40" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="320" y="148" text-anchor="middle" class="b">Director</text><text x="320" y="162" text-anchor="middle" class="m">one unit of work</text>
+      <line x1="320" y1="170" x2="320" y2="218" stroke="#5d6076" marker-end="url(#bt)"/>
+      <rect x="250" y="220" width="140" height="40" rx="4" fill="#ffffff" stroke="#5d6076"/><text x="320" y="238" text-anchor="middle">feature session</text><text x="320" y="252" text-anchor="middle" class="m">own worktree</text>
+      <line x1="222" y1="74" x2="480" y2="128" stroke="#5d6076" marker-end="url(#bt)"/>
+      <rect x="410" y="130" width="140" height="40" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="480" y="148" text-anchor="middle" class="b">Director</text><text x="480" y="162" text-anchor="middle" class="m">one unit of work</text>
+      <line x1="480" y1="170" x2="480" y2="218" stroke="#5d6076" marker-end="url(#bt)"/>
+      <rect x="410" y="220" width="140" height="40" rx="4" fill="#ffffff" stroke="#5d6076"/><text x="480" y="238" text-anchor="middle">feature session</text><text x="480" y="252" text-anchor="middle" class="m">own worktree</text>
+      <line x1="222" y1="74" x2="640" y2="128" stroke="#b33a22" stroke-dasharray="4 3" marker-end="url(#bs)"/>
+      <rect x="570" y="130" width="140" height="40" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="640" y="148" text-anchor="middle" class="b">Director</text><text x="640" y="162" text-anchor="middle" class="m">one unit of work</text>
+      <line x1="640" y1="170" x2="640" y2="218" stroke="#5d6076" marker-end="url(#bt)"/>
+      <rect x="570" y="220" width="140" height="40" rx="4" fill="#ffffff" stroke="#5d6076"/><text x="640" y="238" text-anchor="middle">feature session</text><text x="640" y="252" text-anchor="middle" class="m">own worktree</text>
+      <text x="490" y="96" class="m acc">tell --mode steer</text>
+      <rect x="20" y="284" width="330" height="32" rx="4" fill="#eeeef2" stroke="#a3a5b5"/><text x="185" y="305" text-anchor="middle">task board · 1,141 cards</text>
+      <rect x="370" y="284" width="330" height="32" rx="4" fill="#eeeef2" stroke="#a3a5b5"/><text x="535" y="305" text-anchor="middle">bb memory · 394 records</text>
+    </svg></div>
+    <figcaption>How the pieces fit. Every writer gets its own checkout; the board and memory are the only shared state; the dashed rust line is a steer into a running thread. Source: bb thread list --json and the board and memory counts in this article (93 of 596 threads had their own worktree).</figcaption>
+  </figure>
+
+  <h2><span class="num">03</span>The day has a shape</h2>
+  <p>I rebuild the tree every morning and prune it every evening, to keep it small.</p>
+  <p>The PM starts first. It checks free disk, memory and CPU first, and spawns nothing below 10 GB of free disk. Then it starts today's Coordinator, Teacher and other peers as top-level threads and pins them. Each new peer asks yesterday's counterpart three things: what is done, what is not, what carries over. Unfinished Directors move under today's peer, unpushed work is saved to a named git ref, and only then is yesterday archived.</p>
+  <p>Archived standing threads had lived a median of about a day: 24.1 hours for the PM (27 threads), 25.5 for the Coordinator (18), 24.5 for the Teacher (20). Archived Directors had lived a median of 3.8 hours (391). 574 of the 596 threads are already archived.</p>
+  <figure>
+    <div class="fig-k">The shape of a day</div>
+    <div class="wide"><svg viewBox="0 0 720 250" width="100%" role="img" aria-label="Morning steps in order, then median life of archived threads: standing peers about 24 hours, Directors 3.8 hours">
+      <defs><marker id="bd" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs>
+      <text x="12" y="18" class="hdr">EACH MORNING, IN ORDER · THE PM RUNS IT</text>
+      <text x="12" y="108" class="hdr">MEDIAN LIFE OF AN ARCHIVED THREAD</text>
+      <text x="120" y="134" text-anchor="end">Project Manager</text><rect x="130" y="122" width="528.3" height="16" fill="#313449"/>
+      <text x="652.3" y="134" text-anchor="end" class="m" style="fill:#fff">24.1 h · n=27</text>
+      <text x="120" y="158" text-anchor="end">Coordinator</text><rect x="130" y="146" width="559.0" height="16" fill="#313449"/>
+      <text x="683.0" y="158" text-anchor="end" class="m" style="fill:#fff">25.5 h · n=18</text>
+      <text x="120" y="182" text-anchor="end">Teacher</text><rect x="130" y="170" width="537.1" height="16" fill="#313449"/>
+      <text x="661.1" y="182" text-anchor="end" class="m" style="fill:#fff">24.5 h · n=20</text>
+      <text x="120" y="206" text-anchor="end">Director</text><rect x="130" y="194" width="83.3" height="16" fill="#b33a22"/>
+      <text x="219.3" y="206" class="m acc">3.8 h · n=391</text>
+      <line x1="130" y1="222" x2="700" y2="222" stroke="#d4d5df"/>
+      <line x1="130.0" y1="218" x2="130.0" y2="226" stroke="#5d6076"/><text x="130.0" y="240" text-anchor="middle" class="m">0 h</text>
+      <line x1="261.5" y1="218" x2="261.5" y2="226" stroke="#5d6076"/><text x="261.5" y="240" text-anchor="middle" class="m">6 h</text>
+      <line x1="393.1" y1="218" x2="393.1" y2="226" stroke="#5d6076"/><text x="393.1" y="240" text-anchor="middle" class="m">12 h</text>
+      <line x1="524.6" y1="218" x2="524.6" y2="226" stroke="#5d6076"/><text x="524.6" y="240" text-anchor="middle" class="m">18 h</text>
+      <line x1="656.2" y1="218" x2="656.2" y2="226" stroke="#5d6076"/><text x="656.2" y="240" text-anchor="middle" class="m">24 h</text>
+      <rect x="12" y="28" width="132" height="50" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="78" y="49" text-anchor="middle" class="b">check host</text><text x="78" y="66" text-anchor="middle" class="m">≥10 GB free disk</text>
+      <line x1="144" y1="53" x2="152" y2="53" stroke="#5d6076" marker-end="url(#bd)"/>
+      <rect x="153" y="28" width="132" height="50" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="219" y="49" text-anchor="middle" class="b">start peers</text><text x="219" y="66" text-anchor="middle" class="m">and pin them</text>
+      <line x1="285" y1="53" x2="293" y2="53" stroke="#5d6076" marker-end="url(#bd)"/>
+      <rect x="294" y="28" width="132" height="50" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="360" y="49" text-anchor="middle" class="b">handover</text><text x="360" y="66" text-anchor="middle" class="m">done · not · carry</text>
+      <line x1="426" y1="53" x2="434" y2="53" stroke="#5d6076" marker-end="url(#bd)"/>
+      <rect x="435" y="28" width="132" height="50" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="501" y="49" text-anchor="middle" class="b">move Directors,</text><text x="501" y="66" text-anchor="middle" class="m">save unpushed refs</text>
+      <line x1="567" y1="53" x2="575" y2="53" stroke="#5d6076" marker-end="url(#bd)"/>
+      <rect x="576" y="28" width="132" height="50" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="642" y="49" text-anchor="middle" class="b">archive</text><text x="642" y="66" text-anchor="middle" class="m">yesterday</text>
+    </svg></div>
+    <figcaption>Top: the morning routine as described above. Bottom: median hours from creation to archive for threads created 29 Sep to 28 Oct 2026. Source: bb thread list --json, archivedAt minus createdAt, by role.</figcaption>
+  </figure>
+
+    <div class="takeaways">
+    <div class="k">Key takeaways</div>
+    <ol>
+      <li>Organise by owner, not by file: pinned peers on top, one Director per unit of work.</li>
+      <li>Two agents that write never share a checkout, and yesterday is archived every morning.</li>
+      <li>Steer live work. A correction that arrives after the build is a correction to the wrong thing.</li>
+    </ol>
+  </div>
+
+<h2><span class="num">04</span>Steer, don't queue</h2>
+  <p>A daily tree is only useful if I can change its course mid-flight. The most important verb in bb is not spawn. It is tell.</p>
+  <p><code>bb thread tell &lt;thread&gt; --mode steer</code> delivers a message to an agent while it is still working, so it reads the message before its next step, not after it finishes. A correction that arrives after a long build is a correction to the wrong thing.</p>
+  <p>A guard rejects any message between threads that lacks a short structured note: what is reported, what evidence backs it, what is still open. So when a Director tells the Coordinator "merged", the note has to name the pull request and how it was checked, and the receiver checks it again before believing it.</p>
+  <p>Here is that check catching one real mistake. On 2026-10-28 a peer thread relayed that a teammate's pull request was approved and ready. The Director told to merge it read the reviews on GitHub first. A reviewer's change request from the day before was still standing under the later approval. It refused to merge. The reviewer approved less than two hours later.</p>
+
+  <h2><span class="num">05</span>The board, memory and a model per thread</h2>
+  <p>I keep one shared truth, the tasks board. Since it started on 2026-09-28 it has collected 1,141 cards, 364 of them done. A code card moves through testing, review, merging and production testing to done. A check refuses the move to done unless the card quotes a command that the execution ledger recorded as run with exit code 0. 349 of the 364 done cards carry such a quote; the other 15 were all closed on the board's first morning, before that check landed that afternoon. For a client, that is the start of an audit trail: the card says what was run, not only that it is done.</p>
+  <figure>
+    <div class="fig-k">The board, and what its done cards carry</div>
+    <div class="wide"><svg viewBox="0 0 720 190" width="100%" role="img" aria-label="1,141 cards: 488 backlog, 364 done; of the 364 done, 349 quote an executed command">
+      <text x="10" y="20" class="hdr">1,141 CARDS SINCE 2026-09-28, BY STATUS</text>
+      <text x="10" y="114" class="hdr">THE 364 DONE CARDS</text>
+      <rect x="10.0" y="30" width="299.4" height="34" fill="#d4d5df"/>
+      <text x="20.0" y="52">488 backlog</text>
+      <rect x="309.4" y="30" width="39.3" height="34" fill="#c4c5d0"/>
+      <rect x="348.7" y="30" width="36.8" height="34" fill="#a3a5b5"/>
+      <rect x="385.5" y="30" width="41.1" height="34" fill="#82827a"/>
+      <rect x="426.6" y="30" width="10.4" height="34" fill="#5d6076"/>
+      <rect x="437.0" y="30" width="223.3" height="34" fill="#313449"/>
+      <text x="447.0" y="52" style="fill:#fff">364 done</text>
+      <rect x="660.3" y="30" width="49.7" height="34" fill="#eeeef2"/>
+      <text x="10" y="84" class="m">also: 64 to do · 60 in progress · 67 in code stages · 17 blocked or deciding · 81 canceled</text>
+      <rect x="10" y="124" width="671.2" height="34" fill="#313449"/><text x="20" y="146" style="fill:#fff">349 quote a command the ledger recorded with exit 0</text>
+      <rect x="681.2" y="124" width="28.8" height="34" fill="#b33a22"/>
+      <text x="710" y="178" text-anchor="end" class="m acc">15 without: all closed on day one, before the check landed</text>
+    </svg></div>
+    <figcaption>Top: every card on the board by status, read 2026-10-29. Bottom: done cards whose comments carry an executed: block. Source: bb tasks list paged to the end, bb tasks show per done card (visuals_data.py, done_evidence.py).</figcaption>
+  </figure>
+  <p><code>bb memory</code> is the fleet's long-term recall: 394 compact records. A thread searches it before deciding something that may already be decided.</p>
+  <p>Each thread picks its provider (581 ran on Claude Code, 15 on Codex) and names its model at spawn. A Director gets a reasoning model, a bounded build a mid-size one, checks the smallest. A spawn that names no model is refused, because an unnamed model defaults to the most expensive one.</p>
+
+  <h2><span class="num">06</span>What still goes wrong</h2>
+  <p>I have not made my recurring agent schedules hold up. bb automations run a prompt or a script on a schedule. All six recurring agent schedules I set up are paused today; both recurring scripts still run every hour. One hourly agent monitor ran 77 times; its last run failed with "target thread is in an error state".</p>
+  <p>More cards wait than are done: 488 sit in backlog against 364 done. A thread can file a card in seconds; deciding which cards matter is still my job.</p>
+  <p>Archive is not cleanup. An archived thread leaves its worktree on disk, so the morning routine has to prove each tree is pushed or merged and then delete it explicitly.</p>
+
+  <h2><span class="num">07</span>What to take from it</h2>
+  <p>I organise by owners instead of files, and I suggest the same to anyone who runs more than a handful of agents. I give each long-lived role one pinned thread, each unit of work a Director with a parent, and every writer its own worktree. I steer live work instead of queueing behind it. I archive daily, so the tree I look at is always today's.</p>
+  <p>My sidebar became the org chart, and the org chart became the thing I manage. I still read code every day, but I open it from a thread that has already said why it matters.</p>
+</main>
+<footer class="site"><div class="wrap">Method · every number re-derived 2026-10-29 with read-only commands on one machine; the 30-day window is thread creation 2026-09-29 to 2026-10-28 UTC.<ul><li>Threads, roles, sections, worktrees, providers, lifetimes: <code>bb thread list --json</code> (archived threads included and filtered by <code>archivedAt</code>), role from the title prefix, window by <code>createdAt</code>.</li><li>Pins: live threads with <code>pinnedAt</code> set.</li><li>Board: <code>bb tasks list --project &lt;board&gt; --limit 500 --json</code>, paged to the end; evidence: <code>bb tasks show &lt;card&gt; --json</code> for each done card, searching comments for an <code>executed:</code> block.</li><li>Memory: <code>bb memory catalog --scope project|global --json</code>.</li><li>Automations: <code>bb automation list --project &lt;id&gt; --json</code> (enabled flag, run count, last error).</li></ul></div></footer>
+<script>
+const ink='#313449', mid='#82827a', light='#c4c5d0', rust='#b33a22';
+Chart.defaults.font.family='Inter, system-ui, sans-serif'; Chart.defaults.color='#5d6076';
+const grid={color:'#e6e6ea'};
+new Chart(document.getElementById('roles'),{type:'bar',
+ data:{labels:['Director','Project Manager','Teacher','Coordinator','Communicator','Researcher','Feature sessions and lanes','Monitors, probes, other'],
+ datasets:[{data:[410,27,21,19,8,6,15,90],backgroundColor:[rust,ink,ink,ink,ink,ink,light,light]}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+  scales:{x:{grid,beginAtZero:true},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('daily'),{type:'bar',
+ data:{labels:["29 Sep", "30 Sep", "1 Oct", "2 Oct", "3 Oct", "4 Oct", "5 Oct", "6 Oct", "7 Oct", "8 Oct", "9 Oct", "10 Oct", "11 Oct", "12 Oct", "13 Oct", "14 Oct", "15 Oct", "16 Oct", "17 Oct", "18 Oct", "19 Oct", "20 Oct", "21 Oct", "22 Oct", "23 Oct", "24 Oct", "25 Oct", "26 Oct", "27 Oct", "28 Oct"],
+ datasets:[{label:'Directors',data:[22, 16, 31, 21, 20, 21, 34, 23, 11, 16, 14, 1, 0, 34, 24, 20, 1, 19, 17, 0, 5, 4, 4, 6, 6, 0, 0, 13, 16, 11],backgroundColor:rust},{label:'standing peers',data:[1, 3, 3, 5, 0, 0, 5, 6, 3, 4, 3, 0, 0, 6, 4, 7, 1, 5, 0, 0, 3, 3, 4, 1, 1, 0, 0, 4, 5, 4],backgroundColor:ink},{label:'other',data:[5, 3, 3, 7, 0, 0, 2, 2, 1, 2, 1, 0, 0, 16, 26, 12, 2, 9, 1, 1, 3, 1, 3, 0, 1, 0, 0, 3, 1, 0],backgroundColor:light}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end'}},
+  scales:{x:{stacked:true,grid:{display:false},ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:10}},y:{stacked:true,grid,beginAtZero:true}}}});
+</script>
+</body>
+</html>

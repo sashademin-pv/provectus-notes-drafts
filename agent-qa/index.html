@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I don't call an agent done when its tests are green | Provectus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1c1f2e; --ink-700:#313449; --ink-400:#5d6076; --ink-200:#a3a5b5; --ink-100:#d4d5df;
+    --bone:#ffffff; --cream:#fdf8f4; --sage-600:#3b5249; --sage-400:#6b8b7b; --sage-100:#dce8e2; --sage-50:#eef3f0;
+    --sienna:#d97f4a; --sienna-600:#b33a22; --gray:#82827a; --gray-dark:#4a4a43;
+    --sans:"Inter",system-ui,sans-serif; --display:"DM Serif Display",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  header.site{border-bottom:1px solid var(--ink-100);padding:16px 0}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600)}
+  .brand span{color:var(--ink-400)}
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--sage-600);margin:40px 0 8px}
+  h1{font-family:var(--display);font-weight:400;font-size:44px;line-height:1.1;margin:0 0 16px;letter-spacing:-.01em}
+  .dek{font-size:20px;color:var(--gray-dark);margin:0 0 20px;line-height:1.45}
+  .byline{font-family:var(--mono);font-size:13px;color:var(--ink-400);border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:10px 0;margin:0 0 40px}
+  h2{font-family:var(--display);font-weight:400;font-size:28px;margin:48px 0 12px;line-height:1.2}
+  p{margin:0 0 18px}
+  ul{padding-left:20px;margin:0 0 18px}
+  li{margin:0 0 8px}
+  strong{font-weight:600}
+  figure{margin:28px 0;padding:20px;background:var(--cream);border:1px solid var(--ink-100);border-radius:6px}
+  figcaption{font-family:var(--mono);font-size:12px;color:var(--ink-400);margin-top:10px;line-height:1.5}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 28px}
+  .kpi{border:1px solid var(--ink-100);border-radius:6px;padding:14px 16px;background:var(--bone)}
+  .kpi b{display:block;font-family:var(--display);font-size:34px;line-height:1;color:var(--sienna-600);font-weight:400}
+  .kpi small{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-400);margin-top:6px;line-height:1.4}
+  .canvas-wrap{position:relative;height:260px}
+  .diagram{font-family:var(--mono);font-size:12.5px;line-height:1.5;white-space:pre;overflow-x:auto;color:var(--ink-700);margin:0}
+  svg text{font-family:var(--sans);font-size:12px;fill:var(--ink)}
+  svg .mono{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  .pull{border-left:0;border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:14px 0;margin:28px 0;font-family:var(--display);font-size:24px;line-height:1.3;color:var(--sage-600)}
+  footer.site{border-top:1px solid var(--ink-100);margin-top:64px;padding:20px 0 48px;font-family:var(--mono);font-size:12px;color:var(--ink-400);line-height:1.6}
+  @media (max-width:640px){h1{font-size:34px}.kpis{grid-template-columns:1fr}}
+  /* shared additions, pm-1029 visuals pass: same block in all four articles */
+  a{color:var(--sienna-600)}
+  code{font-family:var(--mono);font-size:14.5px;background:var(--cream);border:1px solid var(--ink-100);padding:0 4px;border-radius:3px}
+  h2 .num,h2 .n{font-family:var(--mono);font-size:15px;color:var(--sienna-600);margin-right:10px;vertical-align:3px}
+  figure .wide svg{display:block;width:100%;height:auto}
+  figure .fig-k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin:0 0 12px}
+  svg .m{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  svg .b{font-weight:600}
+  svg .hdr{font-family:var(--mono);font-size:10px;letter-spacing:.08em;fill:var(--ink-400)}
+  svg .acc{fill:var(--sienna-600)}
+  svg .big{font-family:var(--display);font-size:30px}
+  svg .mid{font-family:var(--display);font-size:20px}
+  table.t{width:100%;border-collapse:collapse;font-size:15px}
+  table.t th,table.t td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--ink-100)}
+  table.t th:first-child,table.t td:first-child{text-align:left}
+  table.t th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-400);font-weight:400}
+  footer.site ul{padding-left:18px;margin:8px 0 0}
+  footer.site code{font-size:11.5px}
+  .takeaways{border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:18px 0 8px;margin:36px 0}
+  .takeaways .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sienna-600);margin:0 0 14px}
+  .takeaways ol{list-style:none;padding:0;margin:0;counter-reset:t}
+  .takeaways li{counter-increment:t;position:relative;padding-left:40px;margin:0 0 14px;font-family:var(--display);font-size:21px;line-height:1.32;color:var(--ink)}
+  .takeaways li::before{content:counter(t,decimal-leading-zero);position:absolute;left:0;top:5px;font-family:var(--mono);font-size:12px;color:var(--sienna-600)}
+  @media (max-width:640px){figure{padding:14px}figure .wide{overflow-x:auto;-webkit-overflow-scrolling:touch}figure .wide svg{width:640px;max-width:none}.takeaways li{font-size:19px}table.t{font-size:13px}table.t th,table.t td{padding:6px 4px}table.t th{font-size:9.5px;letter-spacing:.02em}figure:has(.wide) figcaption::before{content:"Swipe the figure sideways. ";color:var(--sienna-600)}}
+.takeaway{font-size:19px;line-height:1.5;color:var(--ink);background:var(--sage-50);border-left:3px solid var(--sage-600);padding:16px 20px;margin:-24px 0 36px}.takeaway b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600);margin-bottom:6px;font-weight:700}.note{font-family:var(--mono);font-size:13px;color:var(--ink-400)}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><div class="brand">Provectus <span>/ Blog</span></div></div></header>
+<main class="wrap">
+<div class="eyebrow">Engineering · AI agents in production</div>
+<h1>I don't call an agent done when its tests are green</h1>
+<p class="dek">How I develop, test and debug an LLM agent whose answers a reinsurance payout can depend on: I diff the tool calls, run everything twice, and ship every fix with the query it fixes.</p>
+<div class="byline">Sasha Demin · Provectus · 2026-11-09 · 6 min read</div>
+<div class="takeaway"><b>Key takeaway</b> I do not call an agent done because its tests pass; I call it done when the requests it makes match what the question asked for, in every run. I get there by diffing requests between versions, running everything twice, and keeping the failing query of each fix in the test set.</div>
+<p>I ship LLM agents to clients who act on their answers, and I do not treat a green test suite as the end of the work. My working definition of done is narrower: the image I ship, asked the same question twice, asks the database for the same things both times, and those requests match what the question asked for. One of my agents gave the right answer by the wrong path, and the scorer passed it.</p>
+<div class="kpis">
+<div class="kpi"><b>17 / 115</b><small>questions passed in both runs, mid-September baseline; 0 of 39 number checks</small></div>
+<div class="kpi"><b>2 / 2</b><small>runs where the old version requested a dataset the user never named, and the scorer passed it</small></div>
+<div class="kpi"><b>0 / 16</b><small>CHIRPS turns that touched that dataset after the fix, deployed, 2026-10-12</small></div>
+</div>
+<p>A user asked: "Using CHIRPS, how unusual was March 2024 in Bogotá compared with its 30-year average?" CHIRPS is a satellite rainfall dataset, and the data lake held less than thirty years of it, so the expected reply was a polite refusal. The agent refused in both of two runs, and the scorer marked both a pass. When I read the log of what the agent asked the database for, it told another story. Before refusing, the agent had twice requested ERA5-Land, a weather-model dataset the user never mentioned.</p>
+<h2><span class="n">01</span>Where the bugs hide</h2>
+<p>I design my agent so that the model reads a question and decides what to request: which dataset, which place, which dates. Plain code then fetches the data and does the arithmetic, and a separate check rejects any number in an answer that did not come from a fetched row. So the model never computes a number, but it does choose the request. A fluent answer built on the wrong dataset can still pass a scorer that reads answers.</p>
+<figure>
+    <div class="fig-k">Who decides what, inside one turn</div>
+    <div class="wide"><svg viewBox="0 0 720 280" width="100%" role="img" aria-label="The model picks the request; code fetches and computes; a verifier checks numbers; the tool-call log feeds the version diff, while the scorer reads only the answer">
+      <defs><marker id="aq" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs>
+      <text x="195" y="28" text-anchor="middle" class="hdr acc">WHERE THE BUGS HIDE</text>
+      <rect x="5" y="40" width="90" height="56" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="50.0" y="64.0" text-anchor="middle" class="b">user</text><text x="50.0" y="80.0" text-anchor="middle">question</text>
+      <rect x="120" y="40" width="150" height="56" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="195.0" y="56.0" text-anchor="middle" class="b">model</text><text x="195.0" y="72.0" text-anchor="middle" class="m">picks dataset,</text><text x="195.0" y="88.0" text-anchor="middle" class="m">place, dates</text>
+      <rect x="295" y="40" width="150" height="56" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="370.0" y="56.0" text-anchor="middle" class="b">plain code</text><text x="370.0" y="72.0" text-anchor="middle" class="m">fetches rows,</text><text x="370.0" y="88.0" text-anchor="middle" class="m">does the math</text>
+      <rect x="470" y="40" width="140" height="56" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="540.0" y="56.0" text-anchor="middle" class="b">verifier</text><text x="540.0" y="72.0" text-anchor="middle" class="m">numbers must come</text><text x="540.0" y="88.0" text-anchor="middle" class="m">from fetched rows</text>
+      <rect x="635" y="40" width="80" height="56" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="675.0" y="72.0" text-anchor="middle" class="b">answer</text>
+      <rect x="120" y="138" width="325" height="40" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="282.5" y="154.0" text-anchor="middle" class="b">tool-call log, every turn</text><text x="282.5" y="170.0" text-anchor="middle" class="m">tool · dataset · place · dates · refusal</text>
+      <rect x="120" y="208" width="325" height="36" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="282.5" y="230.0" text-anchor="middle">diff requests: branch vs current, two runs</text>
+      <rect x="470" y="208" width="245" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5" stroke-dasharray="4 3"/><text x="592.5" y="230.0" text-anchor="middle">scorer reads the answer</text>
+      <line x1="95" y1="68" x2="118" y2="68" stroke="#5d6076" marker-end="url(#aq)"/>
+      <line x1="270" y1="68" x2="293" y2="68" stroke="#5d6076" marker-end="url(#aq)"/>
+      <line x1="445" y1="68" x2="468" y2="68" stroke="#5d6076" marker-end="url(#aq)"/>
+      <line x1="610" y1="68" x2="633" y2="68" stroke="#5d6076" marker-end="url(#aq)"/>
+      <line x1="195" y1="96" x2="195" y2="136" stroke="#5d6076" marker-end="url(#aq)"/>
+      <line x1="282" y1="178" x2="282" y2="206" stroke="#5d6076" marker-end="url(#aq)"/>
+      <line x1="675" y1="96" x2="675" y2="206" stroke="#a3a5b5" marker-end="url(#aq)"/>
+      <text x="120" y="266" class="m acc">caught the CHIRPS case</text>
+      <text x="470" y="266" class="m">passed it, both runs</text>
+    </svg></div>
+    <figcaption>One turn of the agent and the two ways to test it. The model only chooses the request; code owns every number. Source: the agent's runtime design and the CHIRPS run ledgers (2026-10-07) described in this article.</figcaption>
+  </figure>
+<p>I build this for a parametric reinsurance client, which pays out when a trigger such as rainfall crosses a threshold; my agent runs on LangGraph inside Amazon Bedrock AgentCore.</p>
+<h2><span class="n">02</span>Comparing requests between versions</h2>
+<p>So for every agent change I compare requests instead of answers. Each turn logs its tool calls with their inputs: tool, dataset, place, start and end dates, and the reason for any refusal. I build the branch as the same container image that would ship, run it on a separate test copy of the cloud runtime, and replay one question set against both the branch and the current version. The pull request shows a per-question diff of those requests.</p>
+<figure><div class="wide"><svg viewBox="0 0 680 270" width="100%" role="img" aria-label="Tool calls for the same CHIRPS question on the old and the fixed image"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs><text x="20" y="22" class="b">Old image · both runs</text><text x="360" y="22" class="b">Fixed image · both runs</text><rect x="20" y="36" width="290" height="28" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="165.0" y="54.0" text-anchor="middle" class="">place: Bogotá</text><rect x="20" y="72" width="290" height="28" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="165.0" y="90.0" text-anchor="middle" class="">CHIRPS, 30-year</text><rect x="20" y="108" width="290" height="28" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="165.0" y="126.0" text-anchor="middle" class="">list datasets</text><rect x="20" y="144" width="290" height="28" rx="4" fill="#fbf1ee" stroke="#1c1f2e"/><text x="165.0" y="162.0" text-anchor="middle" class="">ERA5-Land  (not asked for)</text><rect x="20" y="180" width="290" height="28" rx="4" fill="#fbf1ee" stroke="#1c1f2e"/><text x="165.0" y="198.0" text-anchor="middle" class="">ERA5-Land  (not asked for)</text><rect x="360" y="36" width="290" height="28" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="505.0" y="54.0" text-anchor="middle" class="">place: Bogotá</text><rect x="360" y="72" width="290" height="28" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="505.0" y="90.0" text-anchor="middle" class="">list datasets</text><rect x="360" y="108" width="290" height="28" rx="4" fill="#f6f6f8" stroke="#1c1f2e"/><text x="505.0" y="126.0" text-anchor="middle" class="">CHIRPS</text><rect x="360" y="144" width="290" height="28" rx="4" fill="#f6f6f8" stroke="#1c1f2e"/><text x="505.0" y="162.0" text-anchor="middle" class="">CHIRPS</text><rect x="20" y="222" width="290" height="30" rx="4" fill="#fdf8f4" stroke="#82827a"/><text x="165.0" y="241.0" text-anchor="middle" class="b">refuses · scorer: PASS</text><rect x="360" y="222" width="290" height="30" rx="4" fill="#eeeef2" stroke="#1c1f2e"/><text x="505.0" y="241.0" text-anchor="middle" class="b">answers from CHIRPS only</text></svg></div><figcaption>Tool-call inputs for &quot;Using CHIRPS, how unusual was March 2024 in Bogotá compared with its 30-year average?&quot;, two runs per image, read from the run ledgers (2026-10-07). Call order varied between runs; the datasets did not. On the deployed fix (2026-10-12), 16 CHIRPS turns touched ERA5-Land 0 times.</figcaption></figure>
+<p>That diff, not the scorer, is what caught the CHIRPS case for me.</p>
+<h2><span class="n">03</span>Running everything twice</h2>
+<p>I run every question twice, because an agent asked the same question twice can take a different path. I call a question a flip when it passes in one run and fails in the other. Here are the two baselines of my behavioural test set, each run twice on the deployed agent:</p>
+<figure><div class="wide"><svg viewBox="0 0 680 250" width="100%" role="img" aria-label="Merge gate for an agent change"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs><rect x="20" y="20" width="170" height="34" rx="4" fill="#f6f6f8" stroke="#1c1f2e"/><text x="105.0" y="41.0" text-anchor="middle" class="">branch image</text><rect x="20" y="70" width="170" height="34" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="105.0" y="91.0" text-anchor="middle" class="">current image</text><rect x="250" y="45" width="170" height="34" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="335.0" y="66.0" text-anchor="middle" class="">same questions, x2 each</text><line x1="190" y1="37" x2="250" y2="58" stroke="#5d6076" marker-end="url(#a)"/><line x1="190" y1="87" x2="250" y2="66" stroke="#5d6076" marker-end="url(#a)"/><rect x="480" y="45" width="180" height="34" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="570.0" y="66.0" text-anchor="middle" class="">diff tool-call inputs</text><line x1="420" y1="62" x2="480" y2="62" stroke="#5d6076" marker-end="url(#a)"/><line x1="570" y1="79" x2="570" y2="120" stroke="#5d6076" marker-end="url(#a)"/><rect x="440" y="120" width="220" height="34" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="550.0" y="141.0" text-anchor="middle" class="">stable in all 4 runs?</text><text x="430" y="142" text-anchor="end" class="m">no: unstable, not a regression</text><line x1="550" y1="154" x2="550" y2="190" stroke="#5d6076" marker-end="url(#a)"/><text x="560" y="176" class="m">yes</text><rect x="250" y="190" width="410" height="34" rx="4" fill="#eeeef2" stroke="#1c1f2e"/><text x="455.0" y="211.0" text-anchor="middle" class="b">values match · code touches the path · live chat turn x2</text></svg></div><figcaption>The merge gate for an agent change. Two runs per version; a difference counts only if it holds in both runs of both versions, the values agree, and the diff touches that question&#x27;s tool path. The last step is a live conversation in the client&#x27;s chat workspace, twice. Source: the pre-merge gate as run in October 2026; no counts.</figcaption></figure>
+<figure><table class="t"><tr><th>Baseline</th><th>Questions</th><th>Passed both runs</th><th>Number questions passed</th><th>Flipped</th></tr><tr><td>Sep 15</td><td>115</td><td>17</td><td>0 of 39</td><td>3</td></tr><tr><td>Oct 16</td><td>193</td><td>115</td><td>59 of 82</td><td>19</td></tr></table><figcaption>Different test sets: the set grew and changed between the two runs, and so did the agent, so this is not a straight before-and-after. Source: eval/golden baseline.json at two commits, two runs each.</figcaption></figure>
+<figure>
+    <div class="fig-k">The two baselines, each against its own set</div>
+    <div class="wide"><svg viewBox="0 0 720 220" width="100%" role="img" aria-label="September baseline: 17 of 115 passed, 0 of 39 number questions, 3 flipped. October: 115 of 193, 59 of 82, 19 flipped">
+      <rect x="200" y="14" width="12" height="12" fill="#82827a"/><text x="218" y="24" class="m">Sep 15 · 115 questions</text>
+      <rect x="390" y="14" width="12" height="12" fill="#313449"/><text x="408" y="24" class="m">Oct 16 · 193 questions</text>
+      <text x="190" y="70" text-anchor="end">passed both runs</text>
+      <rect x="200" y="48" width="400" height="14" fill="#eeeef2"/><rect x="200" y="48" width="59.1" height="14" fill="#82827a"/><text x="610" y="59" class="m">17 / 115</text>
+      <rect x="200" y="68" width="400" height="14" fill="#eeeef2"/><rect x="200" y="68" width="238.3" height="14" fill="#313449"/><text x="610" y="79" class="m">115 / 193</text>
+      <text x="190" y="128" text-anchor="end">number questions passed</text>
+      <rect x="200" y="106" width="400" height="14" fill="#eeeef2"/><rect x="200" y="106" width="0.0" height="14" fill="#82827a"/><text x="610" y="117" class="m">0 / 39</text>
+      <rect x="200" y="126" width="400" height="14" fill="#eeeef2"/><rect x="200" y="126" width="287.8" height="14" fill="#313449"/><text x="610" y="137" class="m">59 / 82</text>
+      <text x="190" y="186" text-anchor="end">flipped between runs</text>
+      <rect x="200" y="164" width="400" height="14" fill="#eeeef2"/><rect x="200" y="164" width="10.4" height="14" fill="#82827a"/><text x="610" y="175" class="m">3 / 115</text>
+      <rect x="200" y="184" width="400" height="14" fill="#eeeef2"/><rect x="200" y="184" width="39.4" height="14" fill="#b33a22"/><text x="610" y="195" class="m">19 / 193</text>
+    </svg></div>
+    <figcaption>Each bar is a share of its own set; the pale track is every question in that baseline. The sets differ, so compare within a row, not as a before-and-after. Source: eval/golden baseline.json at two commits, two runs each.</figcaption>
+  </figure>
+<p>Flips show up in chat too. In a scripted 29-turn conversation run twice at the end of August, four behaviours differed between the runs, and the follow-up "and the 5th of Feb?" resolved to 2020 in one run and 2026 in the other.</p>
+<p>So I count a difference between versions as a change only if it holds in both runs of both versions; anything else I report as unstable, not as a regression. I also compare values: the same question answered with data twice, but with different numbers, is a finding on its own. And I report the direct path and the chat path separately, so the chat path's own defects stay visible.</p>
+<div class="takeaways">
+    <div class="k">Key takeaways</div>
+    <ol>
+      <li>I diff the requests, not the answers. The scorer passed a refusal built on a dataset the user never named.</li>
+      <li>I run everything twice. A difference counts only if it holds in both runs of both versions.</li>
+      <li>I ship every fix with the query it fixes, and keep that pair in the test set for good.</li>
+    </ol>
+  </div>
+<h2><span class="n">04</span>Every fix ships with its failing query</h2>
+<p>I ship each fix with a pair: the literal query that failed on the old version and works on the new one, each stable across two runs. The pair then joins the test set, so later versions keep running it.</p>
+<p>For CHIRPS, I also changed the expected behaviour: instead of refusing, the agent should use the whole record it holds and name the years it used. On the deployed fix, the eight CHIRPS questions made 16 turns across two runs, and none of them requested ERA5-Land. The old version had requested it in both runs of the original question.</p>
+<p>Then I ran twelve related questions twice. Ten passed both runs. One flipped, refusing in one run and answering correctly in the other. And one was blocked even though its requests and all five returned numbers were identical in both runs, because the answer compared 2023 with a 10-year average without saying which ten years. That missing disclosure was enough to keep the fix from being called done.</p>
+<figure>
+    <div class="fig-k">The CHIRPS case, start to finish</div>
+    <div class="wide"><svg viewBox="0 0 720 220" width="100%" role="img" aria-label="7 October: old image refused twice and requested ERA5-Land; fix changed expected behaviour; 12 October: 16 turns, none touched ERA5-Land; 12 related questions: 10 passed, 1 flipped, 1 blocked">
+      <line x1="20" y1="40" x2="700" y2="40" stroke="#d4d5df"/>
+      <circle cx="22" cy="40" r="5" fill="#b33a22"/><text x="34" y="30" class="hdr">7 OCT · PROBE</text>
+      <rect x="10" y="54" width="210" height="66" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="115.0" y="75.0" text-anchor="middle">old image, CHIRPS question x2</text><text x="115.0" y="91.0" text-anchor="middle" class="m">refused 2 of 2 · scorer PASS</text><text x="115.0" y="107.0" text-anchor="middle" class="m acc">ERA5-Land requested in both</text>
+      <circle cx="267" cy="40" r="5" fill="#313449"/><text x="279" y="30" class="hdr">THE FIX</text>
+      <rect x="255" y="54" width="210" height="66" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="360.0" y="75.0" text-anchor="middle">expected behaviour changed</text><text x="360.0" y="91.0" text-anchor="middle" class="m">use the whole record</text><text x="360.0" y="107.0" text-anchor="middle" class="m">and name the years used</text>
+      <circle cx="512" cy="40" r="5" fill="#313449"/><text x="524" y="30" class="hdr">12 OCT · DEPLOYED</text>
+      <rect x="500" y="54" width="210" height="66" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="605.0" y="75.0" text-anchor="middle">8 CHIRPS questions x2</text><text x="605.0" y="91.0" text-anchor="middle" class="m">16 turns</text><text x="605.0" y="107.0" text-anchor="middle" class="m">0 touched ERA5-Land</text>
+      <rect x="10" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="36" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="62" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="88" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="114" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="140" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="166" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="192" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="218" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="244" y="170" width="22" height="22" rx="2" fill="#313449"/>
+      <rect x="270" y="170" width="22" height="22" rx="2" fill="#a3a5b5"/>
+      <rect x="296" y="170" width="22" height="22" rx="2" fill="#b33a22"/>
+      <text x="10" y="160" class="hdr">THEN 12 RELATED QUESTIONS, TWO RUNS EACH</text>
+      <rect x="340" y="164" width="10" height="10" fill="#313449"/><text x="356" y="173" class="m">10 passed both runs</text>
+      <rect x="340" y="182" width="10" height="10" fill="#a3a5b5"/><text x="356" y="191" class="m">1 flipped: refused once, right once</text>
+      <rect x="340" y="200" width="10" height="10" fill="#b33a22"/><text x="356" y="209" class="m acc">1 blocked: same inputs and values, years not named</text>
+    </svg></div>
+    <figcaption>The CHIRPS fix from probe to deployment. Source: run ledgers for the 2026-10-07 probe and the 2026-10-12 deployed pin, two runs each (numbers.json).</figcaption>
+  </figure>
+<p>I version the test set like code. I keep each superseded version byte for byte with its content hash, 42 of them since late July, and I compare a score only with runs on the same version.</p>
+<h2><span class="n">05</span>Fixing the class of bug</h2>
+<p>When a reviewer finds a bug, I resist the tempting fix of patching the quoted sentence. I send each finding to a root-cause pass first, which names the class of failure and the check that let it through.</p>
+<p>In early September, follow-up questions failed when the conversation had opened in lowercase, as in "how much rain did bogota get in the last 7 days". A helper recognised earlier context only from capitalised place names or four-digit years. On the demo, 8 of 8 follow-ups of that shape failed, against 0 of 19 others. The code fix was a few lines. The wider gap was that my test set had no questions in that style: the early-September version had 0 of 115 questions opening in lowercase. The version dated October 27 has 7 of 197, and I add real failures from clients and demos in the user's own phrasing.</p>
+<figure>
+    <div class="fig-k">One bug, and the gap in the test set behind it</div>
+    <div class="wide"><svg viewBox="0 0 720 150" width="100%" role="img" aria-label="Lowercase-opened follow-ups failed 8 of 8 versus 0 of 19; lowercase questions in the test set went from 0 of 115 to 7 of 197">
+      <text x="10" y="20" class="hdr">FOLLOW-UPS ON THE DEMO, 2026-09-09</text>
+      <text x="10" y="48">opened in lowercase</text>
+      <text x="10" y="98">all other follow-ups</text>
+      <rect x="10" y="56" width="12" height="12" fill="#b33a22"/>
+      <rect x="25" y="56" width="12" height="12" fill="#b33a22"/>
+      <rect x="40" y="56" width="12" height="12" fill="#b33a22"/>
+      <rect x="55" y="56" width="12" height="12" fill="#b33a22"/>
+      <rect x="70" y="56" width="12" height="12" fill="#b33a22"/>
+      <rect x="85" y="56" width="12" height="12" fill="#b33a22"/>
+      <rect x="100" y="56" width="12" height="12" fill="#b33a22"/>
+      <rect x="115" y="56" width="12" height="12" fill="#b33a22"/>
+      <text x="134" y="66" class="m acc">8 of 8 failed</text>
+      <rect x="10.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="25.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="40.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="55.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="70.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="85.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="100.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="115.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="130.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="145.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="160.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="175.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="190.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="205.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="220.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="235.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="250.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="265.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <rect x="280.5" y="106.5" width="11" height="11" fill="#ffffff" stroke="#313449"/>
+      <text x="10" y="138" class="m">0 of 19 failed</text>
+      <line x1="360" y1="10" x2="360" y2="150" stroke="#d4d5df"/>
+      <text x="380" y="20" class="hdr">TEST-SET QUESTIONS OPENING IN LOWERCASE</text>
+      <text x="380" y="48">early-September set</text><rect x="380" y="56" width="300" height="14" fill="#eeeef2"/><rect x="380" y="56" width="0.0" height="14" fill="#82827a"/><text x="386.0" y="67" class="m">0 / 115</text>
+      <text x="380" y="98">27 October set</text><rect x="380" y="106" width="300" height="14" fill="#eeeef2"/><rect x="380" y="106" width="10.7" height="14" fill="#b33a22"/><text x="396.7" y="117" class="m">7 / 197</text>
+    </svg></div>
+    <figcaption>Left: follow-up failures by how the conversation opened, demo runs on 2026-09-09 (read from the fix commit's message, not re-run). Right: test-set questions that open in lowercase, early-September version vs the version dated 27 October. Source: numbers.json.</figcaption>
+  </figure>
+<h2><span class="n">06</span>What still goes wrong</h2>
+<p>I have to report that the flip count went up, from 3 of 115 to 19 of 193. The October set has more questions that fetch real data, and the agent changed too, so with two different sets I cannot split the cause. With two runs per side, these are rough signals rather than precise rates.</p>
+<p>My checks are slow. Building an image, pointing a runtime at it and replaying a question set twice per side takes hours, and changes to the shared tool package have to merge one at a time. From September 1 to October 28, 183 of the 640 commits merged to the integration branch touched agent code.</p>
+<p>No automated check replaces a live turn either. I finish every agent change with a real conversation in the client's own chat workspace, run twice, because a dashboard showing the service is up does not tell you what it answers.</p>
+<h2><span class="n">07</span>Where to start</h2>
+<p>I let the model choose what to request, and I let code own the numbers. I log every request with its inputs, diff those requests between versions, run each comparison twice, and grow the test set from real failures. Then I suggest you pick a question your scorer already passes and read its request log next to its answer. Mine gave the right answer, and the log showed it had taken the wrong path to get there.</p>
+</main>
+<footer class="site"><div class="wrap">
+Provenance: every figure is re-derived from the project repository (git, read-only) or read from the run ledgers it names;
+commands, windows and outputs are in numbers.json alongside this draft. Teammates are named by role; the client is not named.
+</div></footer>
+
+</body>
+</html>

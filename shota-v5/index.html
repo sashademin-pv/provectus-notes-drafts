@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>I talk to one session. I run a fleet that does the work. · Provectus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1c1f2e; --ink-700:#313449; --ink-400:#5d6076; --ink-200:#a3a5b5; --ink-100:#d4d5df;
+    --bone:#ffffff; --cream:#fdf8f4; --sage-600:#3b5249; --sage-400:#6b8b7b; --sage-100:#dce8e2; --sage-50:#eef3f0;
+    --sienna:#d97f4a; --sienna-600:#b33a22; --gray:#82827a; --gray-dark:#4a4a43;
+    --sans:"Inter",system-ui,sans-serif; --display:"DM Serif Display",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  header.site{border-bottom:1px solid var(--ink-100);padding:16px 0}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600)}
+  .brand span{color:var(--ink-400)}
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--sage-600);margin:40px 0 8px}
+  h1{font-family:var(--display);font-weight:400;font-size:44px;line-height:1.1;margin:0 0 16px;letter-spacing:-.01em}
+  .dek{font-size:20px;color:var(--gray-dark);margin:0 0 20px;line-height:1.45}
+  .byline{font-family:var(--mono);font-size:13px;color:var(--ink-400);border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:10px 0;margin:0 0 40px}
+  h2{font-family:var(--display);font-weight:400;font-size:28px;margin:48px 0 12px;line-height:1.2}
+  p{margin:0 0 18px}
+  ul{padding-left:20px;margin:0 0 18px}
+  li{margin:0 0 8px}
+  strong{font-weight:600}
+  figure{margin:28px 0;padding:20px;background:var(--cream);border:1px solid var(--ink-100);border-radius:6px}
+  figcaption{font-family:var(--mono);font-size:12px;color:var(--ink-400);margin-top:10px;line-height:1.5}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 28px}
+  .kpi{border:1px solid var(--ink-100);border-radius:6px;padding:14px 16px;background:var(--bone)}
+  .kpi b{display:block;font-family:var(--display);font-size:34px;line-height:1;color:var(--sienna-600);font-weight:400}
+  .kpi small{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-400);margin-top:6px;line-height:1.4}
+  .canvas-wrap{position:relative;height:260px}
+  .diagram{font-family:var(--mono);font-size:12.5px;line-height:1.5;white-space:pre;overflow-x:auto;color:var(--ink-700);margin:0}
+  svg text{font-family:var(--sans);font-size:12px;fill:var(--ink)}
+  svg .mono{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  .takeaway{font-size:19px;line-height:1.5;color:var(--ink);background:var(--sage-50);border-left:3px solid var(--sage-600);padding:16px 20px;margin:-24px 0 36px}.takeaway b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600);margin-bottom:6px;font-weight:700}.note{font-family:var(--mono);font-size:13px;color:var(--ink-400)}
+  .pull{border-left:0;border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:14px 0;margin:28px 0;font-family:var(--display);font-size:24px;line-height:1.3;color:var(--sage-600)}
+  footer.site{border-top:1px solid var(--ink-100);margin-top:64px;padding:20px 0 48px;font-family:var(--mono);font-size:12px;color:var(--ink-400);line-height:1.6}
+  @media (max-width:640px){h1{font-size:34px}.kpis{grid-template-columns:1fr}}
+  /* shared additions, pm-1029 visuals pass: same block in all four articles */
+  a{color:var(--sienna-600)}
+  code{font-family:var(--mono);font-size:14.5px;background:var(--cream);border:1px solid var(--ink-100);padding:0 4px;border-radius:3px}
+  h2 .num,h2 .n{font-family:var(--mono);font-size:15px;color:var(--sienna-600);margin-right:10px;vertical-align:3px}
+  figure .wide svg{display:block;width:100%;height:auto}
+  figure .fig-k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin:0 0 12px}
+  svg .m{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  svg .b{font-weight:600}
+  svg .hdr{font-family:var(--mono);font-size:10px;letter-spacing:.08em;fill:var(--ink-400)}
+  svg .acc{fill:var(--sienna-600)}
+  svg .big{font-family:var(--display);font-size:30px}
+  svg .mid{font-family:var(--display);font-size:20px}
+  table.t{width:100%;border-collapse:collapse;font-size:15px}
+  table.t th,table.t td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--ink-100)}
+  table.t th:first-child,table.t td:first-child{text-align:left}
+  table.t th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-400);font-weight:400}
+  footer.site ul{padding-left:18px;margin:8px 0 0}
+  footer.site code{font-size:11.5px}
+  .takeaways{border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:18px 0 8px;margin:36px 0}
+  .takeaways .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sienna-600);margin:0 0 14px}
+  .takeaways ol{list-style:none;padding:0;margin:0;counter-reset:t}
+  .takeaways li{counter-increment:t;position:relative;padding-left:40px;margin:0 0 14px;font-family:var(--display);font-size:21px;line-height:1.32;color:var(--ink)}
+  .takeaways li::before{content:counter(t,decimal-leading-zero);position:absolute;left:0;top:5px;font-family:var(--mono);font-size:12px;color:var(--sienna-600)}
+  @media (max-width:640px){figure{padding:14px}figure .wide{overflow-x:auto;-webkit-overflow-scrolling:touch}figure .wide svg{width:640px;max-width:none}.takeaways li{font-size:19px}table.t{font-size:13px}table.t th,table.t td{padding:6px 4px}table.t th{font-size:9.5px;letter-spacing:.02em}figure:has(.wide) figcaption::before{content:"Swipe the figure sideways. ";color:var(--sienna-600)}}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><div class="brand">Provectus <span>/ Engineering notes</span></div></div></header>
+
+<main class="wrap">
+  <div class="eyebrow">Building with agents · draft 6</div>
+  <h1>I talk to one session. I run a fleet that does the work.</h1>
+  <p class="dek">I work from one chat window, four identities and a decision table with zero stops in it, and I report the one metric where my fleet loses. A mystery with numbers, and the resolution is not the model.</p>
+  <div class="byline">Sasha Demin · Provectus · 2026-11-09 · 9 min read</div>
+  <div class="takeaway"><b>Key takeaway</b> I stopped carrying the work in my own head: I talk to one session, and I run a fleet that reads the files, builds, and checks for me. I wrote down the answers I would have given anyway and put every check into code, and that, not a better model, is why the work got faster and better at the same time.</div>
+  <p class="note">Every number carries its window; commands are in the appendix.</p>
+  <p class="pull">Here is the whole thing in one line: I carry less in my head than I did when I was the engineer, and the work got faster and better at the same time. The rest of this piece is how that is even possible, because the first time I saw the numbers I did not believe them either.</p>
+
+  <h2>The claim</h2>
+  <div class="kpis">
+    <div class="kpi"><b>169<span style="font-size:18px;color:var(--ink-400)"> / 287</span></b><small>pull requests merged from my login in the 30 days to 2026-09-16..10-16, of all merged on the repo; 30 per person for the other four</small></div>
+    <div class="kpi"><b>13%</b><small>human change-request rate, 53 days to 2026-09-24; team range 25–40%</small></div>
+    <div class="kpi"><b>66%</b><small>of the code on the integration branch today is blamed to my login: 279,451 of 423,540 lines, 1,794 code and doc files, git blame -w on dev 8388796ba</small></div>
+  </div>
+  <p>In the thirty days from 2026-09-16 to 2026-10-16 my GitHub login merged 169 of the 287 pull requests that landed on the project. The other four active engineers merged 118 between them, about 30 each. Of the code on the integration branch today, 66 percent of the lines are blamed to my login (279,451 of 423,540 across 1,794 code and doc files). My change-request rate from human reviewers over the 53-day audit window ending 2026-09-24 was 13 percent, the lowest of any frequent author; the team ranged from 25 to 40 percent.</p>
+  <figure>
+    <div class="canvas-wrap"><canvas id="prs"></canvas></div>
+    <figcaption>Pull requests created on the project repository 2026-09-16 to 2026-10-16, by author, opened vs merged. Source: gh pr list, re-derived 2026-10-16. Authors shown by role.</figcaption>
+  </figure>
+  <p>The project is a parametric reinsurance agent that answers questions about rainfall and storms from a governed data lake. Real client, real reviewers, real merges. "Merged from my login" means a session running under my account opened the PR, I reviewed it, and I merged it; the typing was the agent's, the accountability mine. Opened in the same window: 206 of 336, median 166 changed lines against 67 to 609 for the others. Since 2026-08-01 the totals are 350 opened of 664.</p>
+  <p>So: one person, one chat window, more merged code than the other four combined, and the lowest rejection rate. What the hell is going on?</p>
+
+  <h2>The first wrong answer</h2>
+  <p>I first assumed I had a very good engineer in a box and that I type fast. I believed that for the first two months. It is wrong, and the way it is wrong is the key to everything else.</p>
+  <p>A very good engineer reads every file, writes every line, and holds every open thread in one head. When the engineer is a language model, that head is its context window. By lunch it is full of file dumps. Every turn re-sends all of it. The answers get slower, then vaguer, then wrong. I measured it: thirty days of transcripts (1,493 of them) showed the one window I talk to spending 63 percent of all tokens and 78 percent of output tokens. One assistant, however good, hits that wall every single day.</p>
+  <figure>
+    <div class="fig-k">Where the tokens go</div>
+    <div class="wide"><svg viewBox="0 0 720 168" width="100%" role="img" aria-label="The window I talk to used 63 percent of all tokens and 78 percent of output tokens">
+      <text x="140" y="44" text-anchor="end">all tokens</text>
+      <rect x="150" y="24" width="340.2" height="34" fill="#b33a22"/>
+      <rect x="490.2" y="24" width="199.8" height="34" fill="#d4d5df"/>
+      <text x="162" y="46" fill="#ffffff" style="fill:#fff" class="b">63% · the window I talk to</text>
+      <text x="502" y="46">37% · everything else</text>
+      <text x="140" y="104" text-anchor="end">output tokens</text>
+      <rect x="150" y="84" width="421.2" height="34" fill="#b33a22"/>
+      <rect x="571.2" y="84" width="118.8" height="34" fill="#d4d5df"/>
+      <text x="162" y="106" style="fill:#fff" class="b">78% · the window I talk to</text>
+      <text x="583" y="106">22%</text>
+      <line x1="150" y1="130" x2="690" y2="130" stroke="#d4d5df"/>
+      <line x1="150" y1="126" x2="150" y2="134" stroke="#5d6076"/><text x="150" y="150" class="m" text-anchor="middle">0%</text>
+      <line x1="420" y1="126" x2="420" y2="134" stroke="#5d6076"/><text x="420" y="150" class="m" text-anchor="middle">50%</text>
+      <line x1="690" y1="126" x2="690" y2="134" stroke="#5d6076"/><text x="690" y="150" class="m" text-anchor="middle">100%</text>
+    </svg></div>
+    <figcaption>Share of tokens spent in the one window I talk to versus every worker and sub-agent. Source: 30 days of transcripts (n=1,493) to 2026-09-27, the 63% and 78% in the text.</figcaption>
+  </figure>
+  <p>Dead end. So if it is not a better engineer, what is it?</p>
+
+  <h2>Four identities, not one assistant</h2>
+  <p>The session I talk to is not an engineer. It is a project manager, and I keep three peers running next to it all day:</p>
+  <ul>
+    <li><strong>Project Manager</strong> owns the board. It moves tickets, batches review asks, watches merges, and is the only identity allowed to send anything to a human.</li>
+    <li><strong>Coordinator</strong> owns the live work. It cuts a goal into lanes, assigns each lane one owner and one acceptance set, and merges them in the right order.</li>
+    <li><strong>Teacher</strong> owns the harness itself. Every correction I make, every reviewer finding, every flaky test becomes a mechanism in the rules, with telemetry to prove it fires.</li>
+    <li><strong>Researcher</strong> owns the evidence. When a decision needs a source, it reads the source in full and posts what it found on the ticket.</li>
+  </ul>
+  <figure>
+    <div class="wide"><svg viewBox="0 0 720 300" width="100%" role="img" aria-label="Topology: I talk to the PM; PM, Coordinator, Teacher, Researcher are peers; Directors under the Coordinator; workers and swarms under Directors">
+      <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs>
+      <rect x="20" y="20" width="110" height="40" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="75" y="45" text-anchor="middle">me</text>
+      <line x1="130" y1="40" x2="190" y2="40" stroke="#5d6076" marker-end="url(#a)"/>
+      <text x="160" y="32" class="mono" text-anchor="middle">1 window</text>
+      <rect x="190" y="20" width="130" height="40" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="255" y="45" text-anchor="middle">Project Manager</text>
+      <rect x="350" y="20" width="110" height="40" rx="4" fill="#eeeef2" stroke="#1c1f2e"/><text x="405" y="45" text-anchor="middle">Coordinator</text>
+      <rect x="480" y="20" width="100" height="40" rx="4" fill="#eeeef2" stroke="#1c1f2e"/><text x="530" y="45" text-anchor="middle">Teacher</text>
+      <rect x="600" y="20" width="100" height="40" rx="4" fill="#eeeef2" stroke="#1c1f2e"/><text x="650" y="45" text-anchor="middle">Researcher</text>
+      <text x="470" y="80" class="mono" text-anchor="middle">peers · never parent and child · relay envelopes between them</text>
+      <line x1="405" y1="60" x2="405" y2="110" stroke="#5d6076" marker-end="url(#a)"/>
+      <rect x="250" y="110" width="100" height="36" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="300" y="133" text-anchor="middle">Director A</text>
+      <rect x="360" y="110" width="100" height="36" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="410" y="133" text-anchor="middle">Director B</text>
+      <rect x="470" y="110" width="100" height="36" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="520" y="133" text-anchor="middle">Director C</text>
+      <text x="410" y="166" class="mono" text-anchor="middle">one topic · one worktree · one acceptance set each</text>
+      <line x1="300" y1="146" x2="300" y2="200" stroke="#5d6076" marker-end="url(#a)"/>
+      <line x1="410" y1="146" x2="410" y2="200" stroke="#5d6076" marker-end="url(#a)"/>
+      <line x1="520" y1="146" x2="520" y2="200" stroke="#5d6076" marker-end="url(#a)"/>
+      <rect x="240" y="200" width="120" height="36" rx="4" fill="#f6f6f8" stroke="#5d6076"/><text x="300" y="223" text-anchor="middle">Sonnet builder</text>
+      <rect x="350" y="200" width="120" height="36" rx="4" fill="#f6f6f8" stroke="#5d6076"/><text x="410" y="223" text-anchor="middle">Haiku swarm</text>
+      <rect x="460" y="200" width="120" height="36" rx="4" fill="#f6f6f8" stroke="#5d6076"/><text x="520" y="223" text-anchor="middle">Opus reasoner</text>
+      <text x="410" y="262" class="mono" text-anchor="middle">each returns ≤1,500 tokens and its context dies</text>
+      <text x="410" y="286" class="mono" text-anchor="middle">model ladder: frontier → Opus → Sonnet → Haiku, pinned at spawn by a hook</text>
+    </svg></div>
+    <figcaption>The topology. Four standing identities are peers; Directors own a topic each; the cheap tiers do the reading and the checking. Rust marks the one window I talk to. Source: the harness as run in October 2026; layout only, no counts.</figcaption>
+  </figure>
+  <p>Under those four I run Directors, one per topic, each with its own worktree so two writers never touch the same tree. Under the Directors I run the cheap workers: a Sonnet model for a bounded build, a swarm of Haiku models when the job is "check these forty rows" rather than "think". A worker reads the same files the engineer-in-a-box would have read, returns a summary of 1,500 tokens, and its context dies. That is the trick that beats the wall: the expensive context never accumulates in the window I talk to.</p>
+  <figure>
+    <div class="fig-k">Before and after: where the reading happens</div>
+    <div class="wide"><svg viewBox="0 0 720 300" width="100%" role="img" aria-label="Before: one context window fills with file dumps. After: the manager window receives short reports from workers whose context dies">
+      <defs><marker id="aw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs>
+      <text x="20" y="22" class="hdr">BEFORE · ONE ENGINEER IN A BOX</text>
+      <rect x="20" y="34" width="300" height="214" rx="4" fill="#ffffff" stroke="#1c1f2e"/>
+      <rect x="32" y="214" width="276" height="24" fill="#eeeef2"/><text x="170" y="230" text-anchor="middle">file dump</text>
+      <rect x="32" y="186" width="276" height="24" fill="#eeeef2"/><text x="170" y="202" text-anchor="middle">diff</text>
+      <rect x="32" y="158" width="276" height="24" fill="#eeeef2"/><text x="170" y="174" text-anchor="middle">test log</text>
+      <rect x="32" y="130" width="276" height="24" fill="#eeeef2"/><text x="170" y="146" text-anchor="middle">file dump</text>
+      <rect x="32" y="102" width="276" height="24" fill="#eeeef2"/><text x="170" y="118" text-anchor="middle">review thread</text>
+      <rect x="32" y="74" width="276" height="24" fill="#fbf1ee" stroke="#b33a22"/><text x="170" y="90" text-anchor="middle">file dump</text>
+      <rect x="32" y="46" width="276" height="24" fill="#fbf1ee" stroke="#b33a22"/><text x="170" y="62" text-anchor="middle">build output</text>
+      <text x="20" y="268" class="m">one context window · every turn re-sends all of it</text>
+      <text x="20" y="286" class="m acc">slower, then vaguer, then wrong</text>
+      <line x1="360" y1="20" x2="360" y2="290" stroke="#d4d5df"/>
+      <text x="400" y="22" class="hdr">AFTER · ONE MANAGER, A FLEET</text>
+      <rect x="400" y="34" width="300" height="88" rx="4" fill="#fbf1ee" stroke="#b33a22"/>
+      <text x="550" y="54" text-anchor="middle" class="b">the window I talk to</text>
+      <rect x="412" y="66" width="88" height="44" rx="3" fill="#ffffff" stroke="#d4d5df"/><text x="456" y="84" text-anchor="middle">report</text><text x="456" y="100" text-anchor="middle" class="m">≤1,500 tok</text>
+      <rect x="506" y="66" width="88" height="44" rx="3" fill="#ffffff" stroke="#d4d5df"/><text x="550" y="84" text-anchor="middle">report</text><text x="550" y="100" text-anchor="middle" class="m">≤1,500 tok</text>
+      <rect x="600" y="66" width="88" height="44" rx="3" fill="#ffffff" stroke="#d4d5df"/><text x="644" y="84" text-anchor="middle">report</text><text x="644" y="100" text-anchor="middle" class="m">≤1,500 tok</text>
+      <line x1="456" y1="174" x2="456" y2="124" stroke="#5d6076" marker-end="url(#aw)"/>
+      <line x1="550" y1="174" x2="550" y2="124" stroke="#5d6076" marker-end="url(#aw)"/>
+      <line x1="644" y1="174" x2="644" y2="124" stroke="#5d6076" marker-end="url(#aw)"/>
+      <rect x="412" y="176" width="88" height="44" rx="3" fill="#ffffff" stroke="#5d6076" stroke-dasharray="4 3"/><text x="456" y="194" text-anchor="middle">Sonnet</text><text x="456" y="210" text-anchor="middle" class="m">builder</text>
+      <rect x="506" y="176" width="88" height="44" rx="3" fill="#ffffff" stroke="#5d6076" stroke-dasharray="4 3"/><text x="550" y="194" text-anchor="middle">Haiku</text><text x="550" y="210" text-anchor="middle" class="m">swarm</text>
+      <rect x="600" y="176" width="88" height="44" rx="3" fill="#ffffff" stroke="#5d6076" stroke-dasharray="4 3"/><text x="644" y="194" text-anchor="middle">Opus</text><text x="644" y="210" text-anchor="middle" class="m">reasoner</text>
+      <text x="550" y="240" text-anchor="middle" class="m">workers read the files</text>
+      <text x="400" y="268" class="m">dashed = context dies after the report</text>
+      <text x="400" y="286" class="m acc">the window I talk to stays small</text>
+    </svg></div>
+    <figcaption>The wall and the way around it. Left, the single-assistant setup the text calls the first wrong answer; right, the fleet. Source: the topology above and the 1,500-token report cap; layout only, block sizes not to scale.</figcaption>
+  </figure>
+  <p>And here is the first surprise from our own dispatch data: Haiku judges were accepted 83 percent of the time (n=24) and the frontier model 45 percent (n=11), where accepted means dispatched once, not re-dispatched, and not followed by a correction from me. Small samples, one direction: a judge needs an independent frame more than it needs a bigger brain. The cheapest model wins the judging job on merit.</p>
+  <figure>
+    <div class="fig-k">Judge acceptance by model</div>
+    <div class="wide"><svg viewBox="0 0 720 150" width="100%" role="img" aria-label="Haiku judges accepted 83 percent of the time, n=24; frontier-model judges 45 percent, n=11">
+      <text x="190" y="40" text-anchor="end">Haiku judges</text>
+      <rect x="200" y="22" width="400" height="28" fill="#b33a22"/>
+      <text x="610" y="41" class="b">83%</text><text x="645" y="41" class="m">n=24</text>
+      <text x="190" y="88" text-anchor="end">frontier-model judges</text>
+      <rect x="200" y="70" width="218.4" height="28" fill="#82827a"/>
+      <text x="428" y="89" class="b">45%</text><text x="463" y="89" class="m">n=11</text>
+      <line x1="200" y1="112" x2="680" y2="112" stroke="#d4d5df"/>
+      <text x="200" y="132" class="m" text-anchor="middle">0%</text><text x="440" y="132" class="m" text-anchor="middle">50%</text><text x="680" y="132" class="m" text-anchor="middle">100%</text>
+    </svg></div>
+    <figcaption>Share of judge dispatches accepted: sent once, not re-sent, no correction from me after. Source: 30 days of dispatches to 2026-09-24 (1,064 total; judges n=24 and n=11). Small samples, one direction.</figcaption>
+  </figure>
+  <p>Fine. Four identities, a ladder of cheap workers. But that raises the real question. If I write forty sentences a day, who is making the hundreds of decisions a project needs?</p>
+
+  <h2>How a decision gets made without me</h2>
+  <p>I am asked most about the part with the least magic, and my rule there is: assume and disclose.</p>
+  <p>I went back and read sixty-five of my own answers to agent questions over one week. I expected a mix. What I found was a table that already existed in my head and that I had never written down. Nineteen answers were "yes, as proposed". Eighteen were "push forward". Sixteen were an override I could have stated as a rule in advance. The number of times I said "stop and wait" was zero.</p>
+  <figure>
+    <div class="canvas-wrap" style="height:220px"><canvas id="decisions"></canvas></div>
+    <figcaption>What I actually answered when an agent asked: 65 decision responses over 7 days to 2026-09-28, haiku-classified with controls. Zero were "stop and wait".</figcaption>
+  </figure>
+  <p>Zero. Every question that interrupted me that week was a question I would have answered the same way without being asked. So I wrote the table down. Now my agent reads the row, does the default, and writes one line in its report: assumed X, reverses if Y. A short list still stops my fleet: pushing to production without a directive, sending a message to a person who was not named in the ask, money, secrets, anything irreversible. Everything else proceeds.</p>
+  <p>That should scare you a little, and it scares me. An agent that never asks is an agent that ships whatever it believes. What stops it from shipping a wrong number?</p>
+
+    <div class="takeaways">
+    <div class="k">Key takeaways</div>
+    <ol>
+      <li>Workers read the files and report in 1,500 tokens; the window I talk to never fills up.</li>
+      <li>Write down the answers you would give anyway. A week of 65 answers held zero "stop and wait".</li>
+      <li>The model proposes; code owns every number and every gate, and those gates fail closed.</li>
+    </ol>
+  </div>
+
+<h2>The model never touches the gate</h2>
+  <p>My second rule is the one that makes the first one safe: I let the model propose and explain, and I let deterministic code own every number and every gate.</p>
+  <p>I merge through a script that reads the branch protection, the review state, and the check results, not through a model's opinion that it looks fine. I move a ticket only on an executed command quoted in the comment. A hook rejects my PR body before it reaches GitHub if it names nothing it actually ran. These gates fail closed. Interpretation (which period did the user mean, which city) is allowed to assume, but it must say so.</p>
+  <figure>
+<div class="wide"><svg viewBox="0 0 720 240" width="100%" role="img" aria-label="Pipeline: ask, route, dispatch, build are model steps; gate, merge, probe are code; a stop list halts the fleet">
+      <defs><marker id="ap" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs>
+      <text x="257" y="18" text-anchor="middle" class="hdr">MODELS PROPOSE</text>
+      <line x1="112" y1="28" x2="402" y2="28" stroke="#82827a"/><line x1="112" y1="28" x2="112" y2="36" stroke="#82827a"/><line x1="402" y1="28" x2="402" y2="36" stroke="#82827a"/>
+      <text x="563" y="18" text-anchor="middle" class="hdr acc">CODE OWNS THE GATE</text>
+      <line x1="418" y1="28" x2="708" y2="28" stroke="#b33a22"/><line x1="418" y1="28" x2="418" y2="36" stroke="#b33a22"/><line x1="708" y1="28" x2="708" y2="36" stroke="#b33a22"/>
+      <rect x="10" y="44" width="88" height="40" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="54" y="69" text-anchor="middle" class="b">ask</text>
+      <text x="54" y="104" text-anchor="middle" class="m" style="font-size:10px">PM reads</text>
+      <text x="54" y="119" text-anchor="middle" class="m" style="font-size:10px">the board</text>
+      <line x1="98" y1="64" x2="111" y2="64" stroke="#5d6076" marker-end="url(#ap)"/>
+      <rect x="112" y="44" width="88" height="40" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="156" y="69" text-anchor="middle" class="b">route</text>
+      <text x="156" y="104" text-anchor="middle" class="m" style="font-size:10px">identity</text>
+      <text x="156" y="119" text-anchor="middle" class="m" style="font-size:10px">table picks</text>
+      <text x="156" y="134" text-anchor="middle" class="m" style="font-size:10px">the lane</text>
+      <line x1="200" y1="64" x2="213" y2="64" stroke="#5d6076" marker-end="url(#ap)"/>
+      <rect x="214" y="44" width="88" height="40" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="258" y="69" text-anchor="middle" class="b">dispatch</text>
+      <text x="258" y="104" text-anchor="middle" class="m" style="font-size:10px">Director,</text>
+      <text x="258" y="119" text-anchor="middle" class="m" style="font-size:10px">brief and</text>
+      <text x="258" y="134" text-anchor="middle" class="m" style="font-size:10px">model pin</text>
+      <line x1="302" y1="64" x2="315" y2="64" stroke="#5d6076" marker-end="url(#ap)"/>
+      <rect x="316" y="44" width="88" height="40" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="360" y="69" text-anchor="middle" class="b">build</text>
+      <text x="360" y="104" text-anchor="middle" class="m" style="font-size:10px">Sonnet,</text>
+      <text x="360" y="119" text-anchor="middle" class="m" style="font-size:10px">red test</text>
+      <text x="360" y="134" text-anchor="middle" class="m" style="font-size:10px">first</text>
+      <line x1="404" y1="64" x2="417" y2="64" stroke="#5d6076" marker-end="url(#ap)"/>
+      <rect x="418" y="44" width="88" height="40" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="462" y="69" text-anchor="middle" class="b">gate</text>
+      <text x="462" y="104" text-anchor="middle" class="m" style="font-size:10px">hooks fail</text>
+      <text x="462" y="119" text-anchor="middle" class="m" style="font-size:10px">closed on $,</text>
+      <text x="462" y="134" text-anchor="middle" class="m" style="font-size:10px">data, secrets</text>
+      <line x1="506" y1="64" x2="519" y2="64" stroke="#5d6076" marker-end="url(#ap)"/>
+      <rect x="520" y="44" width="88" height="40" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="564" y="69" text-anchor="middle" class="b">merge</text>
+      <text x="564" y="104" text-anchor="middle" class="m" style="font-size:10px">script reads</text>
+      <text x="564" y="119" text-anchor="middle" class="m" style="font-size:10px">GitHub state</text>
+      <line x1="608" y1="64" x2="621" y2="64" stroke="#5d6076" marker-end="url(#ap)"/>
+      <rect x="622" y="44" width="88" height="40" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="666" y="69" text-anchor="middle" class="b">probe</text>
+      <text x="666" y="104" text-anchor="middle" class="m" style="font-size:10px">live invoke,</text>
+      <text x="666" y="119" text-anchor="middle" class="m" style="font-size:10px">never a</text>
+      <text x="666" y="134" text-anchor="middle" class="m" style="font-size:10px">health check</text>
+      <rect x="90" y="196" width="166" height="26" rx="3" fill="#ffffff" stroke="#b33a22"/><text x="173.0" y="213" text-anchor="middle" class="m">prod without directive</text>
+      <rect x="264" y="196" width="132" height="26" rx="3" fill="#ffffff" stroke="#b33a22"/><text x="330.0" y="213" text-anchor="middle" class="m">unnamed recipient</text>
+      <rect x="404" y="196" width="52" height="26" rx="3" fill="#ffffff" stroke="#b33a22"/><text x="430.0" y="213" text-anchor="middle" class="m">money</text>
+      <rect x="464" y="196" width="64" height="26" rx="3" fill="#ffffff" stroke="#b33a22"/><text x="496.0" y="213" text-anchor="middle" class="m">secrets</text>
+      <rect x="536" y="196" width="98" height="26" rx="3" fill="#ffffff" stroke="#b33a22"/><text x="585.0" y="213" text-anchor="middle" class="m">irreversible</text>
+      <line x1="10" y1="152" x2="710" y2="152" stroke="#d4d5df"/>
+      <text x="10" y="180" class="m">assume and disclose at every open question that is not on the stop list</text>
+      <text x="10" y="213" class="hdr acc">STOP LIST</text>
+    </svg></div>
+    <figcaption>The pipeline one ask travels. Models sit at "route", "dispatch" and "build"; everything that can cost money or ship a wrong number sits in code (rust). Source: the merge and task-gate hooks as configured in October 2026; no counts.</figcaption>
+  </figure>
+  <p>So the chain every pull request walks, with no exceptions for mine:</p>
+  <ol>
+    <li><strong>Plan, then critique the plan.</strong> A Director writes the brief; a cheap critic cuts scope and names what would refute the plan before anyone builds.</li>
+    <li><strong>Red test first.</strong> The builder writes one failing test, watches it fail, then writes the shortest diff that turns it green.</li>
+    <li><strong>Two reviews by different models.</strong> A full review with several lenses (correctness, contracts, silent failures, tests), then a separate bug hunt on the diff by a model that did not write it. Findings get fixed before the PR opens, not after.</li>
+    <li><strong>Two runs on two heads.</strong> Anything touching the agent runs twice on the candidate runtime and twice on the current one, and a row counts as a change only if it is stable on both. Then the same questions go through the real Slack workspace, twice.</li>
+    <li><strong>A script merges, not a model.</strong> It reads the branch rules, the human review state and the checks, and refuses when any of them is red. A human approval is still required on this repo; my fleet cannot approve its own work.</li>
+    <li><strong>Re-plan when a gate fails.</strong> A red golden row goes back to a bug hunt on the class of failure, not a patch on the quoted line, because the patch is what gets rejected the second time.</li>
+  </ol>
+  <p>Does any of that actually happen, or is it a nice diagram? Over the last thirty days, 123 of the 182 pull requests I merged name one of those executed gates in the body: a full review, a bug hunt, a candidate battery or a golden run. For the 125 merged by the rest of the team it is 18. That is not a quality verdict on anyone; it is a count of what was written down, and it is the thing I would show first.</p>
+  <figure>
+    <div class="canvas-wrap" style="height:200px"><canvas id="gates"></canvas></div>
+    <figcaption>Merged PRs since 2026-09-16 whose body names an executed gate (full review, bug hunt, candidate battery, golden run). A count of what was written down, not a quality verdict. Source: gh pr list --state merged, body regex, 2026-10-16.</figcaption>
+  </figure>
+  <p>Research runs the same way. A Researcher lane reads sources in full before a design decision and posts what it found on the ticket; 28 of the 41 research notes in the project knowledge base were written in October, under the coordination model.</p>
+  <p>At this point the story is too clean. Lowest rejection rate, most merges, every gate in code. If you have shipped software you are waiting for the catch. There is one, and my own ledger found it before any reviewer did.</p>
+
+  <h2>The catch</h2>
+  <p>Over the audited 53 days my functions averaged 19 lines against 24 for the two next-most-active authors, and my duplicate-block rate was three to nine per thousand lines against eighteen to thirty-five. Good. Then the third metric came in.</p>
+  <p>My cyclomatic complexity was the highest on the team: 4.96 mean against 2.9 to 4.3, with four functions above 40. That is the one place I sit outside the band. It splits by domain (agent runtime versus infrastructure), so it is partly what I work on, but it is real, and a fleet that writes small, non-duplicated, deeply branching functions is a fleet optimising for the two metrics it can see. It is now a review lens, which is the Teacher's job: a finding becomes a mechanism, not a memory.</p>
+  <figure>
+    <div class="canvas-wrap"><canvas id="quality"></canvas></div>
+    <figcaption>Three code-quality metrics by author, origin/dev at 54b08a97, majority git-blame, 2026-09-24. Lower is better on all three. Complexity is the one where I lose.</figcaption>
+  </figure>
+  <p>Two more things go wrong often enough to name. Live batteries flip, meaning two identical runs on the same image choose different tool inputs, about three percent of the time on direct invoke and over twenty percent through the chat bridge, so every behavioural claim needs two runs on both heads before it counts. And the laptop itself is the bottleneck more often than the models: with six lanes live, load sits above twice the core count and the spawn gate refuses new work until it clears.</p>
+
+  <h2>What I actually get out of this</h2>
+  <p>I come back to the one line at the top. Less in my head: I write forty sentences a day and read reports of 1,500 tokens, not files, because the decision table answers the questions that used to interrupt me and the gates answer the ones I used to lose sleep over. Faster: 206 pull requests in thirty days, median 166 lines, each one through the same chain. Better: the lowest change-request rate on the team, two reviews and two live runs before anything merges, and my one weak metric found by my own ledger rather than by a reviewer.</p>
+  <p>The three go together because of one thing. It was never the model. It was writing down what I would have said, and putting everything I would have checked into code that cannot be talked out of it.</p>
+  <p>Every number above has a command next to it. To check the first one, run the pull-request listing for the repository with a merged-after filter of 2026-09-16 and group by author; it takes four seconds. That is why I trust the numbers enough to publish them, and why the complexity number is in here next to the good ones.</p>
+</main>
+
+<footer class="site"><div class="wrap">
+  Appendix · provenance<br>
+  Code ownership: git blame -w --line-porcelain on origin/dev 8388796ba over py/tf/ts/js/yml/sh/md files (uv.lock, golden data excluded), author-mail counts, 2026-10-16T11:21:05Z. PR counts: gh pr list --state all --search "created:&gt;=2026-09-16" --json author,state, 336 rows (664 since 2026-08-01), re-derived 2026-10-16T11:24Z. Gate mentions: --state merged --search "merged:&gt;=2026-09-16", body matches full-review|bug-hunter|candidate|golden|battery|stable_diff|agent-probe.<br>
+  Change-request rate and code metrics: 2026-09-24 audits (radon cc, duplicate 6-line windows, line-precise blame); carried, not re-run today.<br>
+  Judge acceptance, token share, decision table: 30-day transcript mining to 2026-09-24/28 (1,064 dispatches, 1,493 transcripts, 65 responses).<br>
+  Flip rates: 2026-09-22 both-runs batteries. Draft 6 (cut: Why it costs less, 2026-10-29), numbers.json alongside.
+</div></footer>
+<script>
+const ink='#313449', mid='#82827a', light='#c4c5d0', rust='#b33a22';
+Chart.defaults.font.family='Inter, system-ui, sans-serif'; Chart.defaults.color='#5d6076';
+const grid={color:'#e6e6ea'};
+new Chart(document.getElementById('prs'),{type:'bar',data:{labels:['me','data eng A','product owner','infra eng','agent eng'],
+ datasets:[{label:'opened',data:[206,57,38,19,16],backgroundColor:light},{label:'merged',data:[169,52,35,17,14],backgroundColor:[rust,ink,ink,ink,ink]}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end'}},scales:{x:{grid:{display:false}},y:{grid,beginAtZero:true}}}});
+new Chart(document.getElementById('decisions'),{type:'bar',data:{labels:['approve as proposed','push forward','override','new constraint','pick an option','stop or hold'],
+ datasets:[{data:[19,18,16,8,4,0],backgroundColor:[ink,ink,mid,mid,light,rust]}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid,beginAtZero:true},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('gates'),{type:'bar',data:{labels:['me (182 merged)','rest of team (125 merged)'],
+ datasets:[{label:'names an executed gate',data:[123,18],backgroundColor:rust},{label:'does not',data:[59,107],backgroundColor:light}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end'}},scales:{x:{stacked:true,grid,beginAtZero:true},y:{stacked:true,grid:{display:false}}}}});
+new Chart(document.getElementById('quality'),{type:'bar',data:{labels:['me','data eng A','infra eng','product owner','data eng C'],
+ datasets:[{label:'function length (mean LOC)',data:[19.2,24.5,10.0,24.7,15.1],backgroundColor:ink},{label:'duplicate 6-line windows per 1k (midpoint)',data:[6.4,23.7,3.2,4.0,1.2],backgroundColor:light},{label:'cyclomatic complexity (mean)',data:[4.96,4.28,3.05,3.80,2.87],backgroundColor:rust}]},
+ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',align:'end'}},scales:{x:{grid:{display:false}},y:{grid,beginAtZero:true}}}});
+</script>
+</body>
+</html>

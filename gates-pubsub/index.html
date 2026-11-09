@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Status is a hypothesis. How I keep my AI agents honest. | Provectus</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#1c1f2e; --ink-700:#313449; --ink-400:#5d6076; --ink-200:#a3a5b5; --ink-100:#d4d5df;
+    --bone:#ffffff; --cream:#fdf8f4; --sage-600:#3b5249; --sage-400:#6b8b7b; --sage-100:#dce8e2; --sage-50:#eef3f0;
+    --sienna:#d97f4a; --sienna-600:#b33a22; --gray:#82827a; --gray-dark:#4a4a43;
+    --sans:"Inter",system-ui,sans-serif; --display:"DM Serif Display",Georgia,serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bone);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  header.site{border-bottom:1px solid var(--ink-100);padding:16px 0}
+  .wrap{max-width:760px;margin:0 auto;padding:0 24px}
+  .brand{font-family:var(--mono);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600)}
+  .brand span{color:var(--ink-400)}
+  .eyebrow{font-family:var(--mono);font-size:13px;color:var(--sage-600);margin:40px 0 8px}
+  h1{font-family:var(--display);font-weight:400;font-size:44px;line-height:1.1;margin:0 0 16px;letter-spacing:-.01em}
+  .dek{font-size:20px;color:var(--gray-dark);margin:0 0 20px;line-height:1.45}
+  .byline{font-family:var(--mono);font-size:13px;color:var(--ink-400);border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:10px 0;margin:0 0 40px}
+  h2{font-family:var(--display);font-weight:400;font-size:28px;margin:48px 0 12px;line-height:1.2}
+  p{margin:0 0 18px}
+  ul{padding-left:20px;margin:0 0 18px}
+  li{margin:0 0 8px}
+  strong{font-weight:600}
+  figure{margin:28px 0;padding:20px;background:var(--cream);border:1px solid var(--ink-100);border-radius:6px}
+  figcaption{font-family:var(--mono);font-size:12px;color:var(--ink-400);margin-top:10px;line-height:1.5}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:0 0 28px}
+  .kpi{border:1px solid var(--ink-100);border-radius:6px;padding:14px 16px;background:var(--bone)}
+  .kpi b{display:block;font-family:var(--display);font-size:34px;line-height:1;color:var(--sienna-600);font-weight:400}
+  .kpi small{display:block;font-family:var(--mono);font-size:11px;color:var(--ink-400);margin-top:6px;line-height:1.4}
+  .canvas-wrap{position:relative;height:260px}
+  .diagram{font-family:var(--mono);font-size:12.5px;line-height:1.5;white-space:pre;overflow-x:auto;color:var(--ink-700);margin:0}
+  svg text{font-family:var(--sans);font-size:12px;fill:var(--ink)}
+  svg .mono{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  .pull{border-left:0;border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:14px 0;margin:28px 0;font-family:var(--display);font-size:24px;line-height:1.3;color:var(--sage-600)}
+  footer.site{border-top:1px solid var(--ink-100);margin-top:64px;padding:20px 0 48px;font-family:var(--mono);font-size:12px;color:var(--ink-400);line-height:1.6}
+  @media (max-width:640px){h1{font-size:34px}.kpis{grid-template-columns:1fr}}
+  /* shared additions, pm-1029 visuals pass: same block in all four articles */
+  a{color:var(--sienna-600)}
+  code{font-family:var(--mono);font-size:14.5px;background:var(--cream);border:1px solid var(--ink-100);padding:0 4px;border-radius:3px}
+  h2 .num,h2 .n{font-family:var(--mono);font-size:15px;color:var(--sienna-600);margin-right:10px;vertical-align:3px}
+  figure .wide svg{display:block;width:100%;height:auto}
+  figure .fig-k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-400);margin:0 0 12px}
+  svg .m{font-family:var(--mono);font-size:11px;fill:var(--ink-400)}
+  svg .b{font-weight:600}
+  svg .hdr{font-family:var(--mono);font-size:10px;letter-spacing:.08em;fill:var(--ink-400)}
+  svg .acc{fill:var(--sienna-600)}
+  svg .big{font-family:var(--display);font-size:30px}
+  svg .mid{font-family:var(--display);font-size:20px}
+  table.t{width:100%;border-collapse:collapse;font-size:15px}
+  table.t th,table.t td{text-align:right;padding:8px 10px;border-bottom:1px solid var(--ink-100)}
+  table.t th:first-child,table.t td:first-child{text-align:left}
+  table.t th{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-400);font-weight:400}
+  footer.site ul{padding-left:18px;margin:8px 0 0}
+  footer.site code{font-size:11.5px}
+  .takeaways{border-top:1px solid var(--ink-100);border-bottom:1px solid var(--ink-100);padding:18px 0 8px;margin:36px 0}
+  .takeaways .k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sienna-600);margin:0 0 14px}
+  .takeaways ol{list-style:none;padding:0;margin:0;counter-reset:t}
+  .takeaways li{counter-increment:t;position:relative;padding-left:40px;margin:0 0 14px;font-family:var(--display);font-size:21px;line-height:1.32;color:var(--ink)}
+  .takeaways li::before{content:counter(t,decimal-leading-zero);position:absolute;left:0;top:5px;font-family:var(--mono);font-size:12px;color:var(--sienna-600)}
+  @media (max-width:640px){figure{padding:14px}figure .wide{overflow-x:auto;-webkit-overflow-scrolling:touch}figure .wide svg{width:640px;max-width:none}.takeaways li{font-size:19px}table.t{font-size:13px}table.t th,table.t td{padding:6px 4px}table.t th{font-size:9.5px;letter-spacing:.02em}figure:has(.wide) figcaption::before{content:"Swipe the figure sideways. ";color:var(--sienna-600)}}
+  .takeaway{font-size:19px;line-height:1.5;color:var(--ink);background:var(--sage-50);border-left:3px solid var(--sage-600);padding:16px 20px;margin:-24px 0 36px}.takeaway b{display:block;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--sage-600);margin-bottom:6px;font-weight:700}.note{font-family:var(--mono);font-size:13px;color:var(--ink-400)}
+</style>
+</head>
+<body>
+<header class="site"><div class="wrap"><div class="brand">Provectus <span>/ Engineering notes</span></div></div></header>
+
+<main class="wrap">
+  <div class="eyebrow">Building with agents</div>
+  <h1>Status is a hypothesis. How I keep my AI agents honest.</h1>
+  <p class="dek">I let a task card move only on evidence that was executed, and I send every event to the session that owns the work. What that caught in October, and what it still misses.</p>
+  <div class="byline">Sasha Demin · Provectus · 2026-11-09 · 6 min read</div>
+  <div class="takeaway"><b>Key takeaway</b> I treat every status my agents report as a hypothesis, and I let a card move only when code has checked that the claimed command really ran. I also send each event to the one session that can act on it, so the board and the work cannot quietly drift apart.</div>
+  <p class="note">Snapshot 29 October 2026; every number is a read-only count.</p>
+  <p>One morning in October, I found that a reviewer on my client's side had asked for changes on my pull requests. The task board showed no movement. No model had failed. A small script of mine that forwards the reviewer's Slack thread was still sending it to yesterday's manager session, which nobody was reading, and nothing I had built watched GitHub reviews at all.</p>
+  <p>For me, that was the bigger risk of running AI agents at scale. Not that they write bad code, but that the board says one thing, the work says another, and nobody notices until a client asks. I run a fleet of agent sessions that build, review and merge code for a parametric reinsurance client, whose contracts pay out when a measured weather event crosses a threshold. If you run more than one agent and report its status to anyone, you will likely meet this too.</p>
+  <p>A wrong status costs the client time: their reviewer waits on a fix nobody is making. So I treat every status as a hypothesis and every artifact as the fact, with two rules, each backed by code. First, a card reaches review or done only when its comment cites a command the log shows actually ran. Second, each event is pushed to the session that owns the work, not to a manager. For the client, a "done" on the board points at a logged command instead of a sentence, and their review reaches the agent that runs the work.</p>
+
+  <h2>01 A status is just a word</h2>
+  <p>On 29 October, I had 67 cards in an active code stage. I cannot check 67 claims by hand every day. So I stopped trusting the status field and started checking the move.</p>
+  <figure>
+    <div class="fig-k">1,141 cards on the board</div>
+    <div class="wide"><svg viewBox="0 0 720 280" width="100%" role="img" aria-label="Task board by status: 488 backlog, 364 done, 67 in active code stages">
+      <rect x="10.0" y="30" width="299.4" height="36" fill="#d4d5df"/>
+      <text x="20.0" y="53">488 backlog</text>
+      <rect x="309.4" y="30" width="39.3" height="36" fill="#c4c5d0"/>
+      <rect x="348.7" y="30" width="36.8" height="36" fill="#a3a5b5"/>
+      <rect x="385.5" y="30" width="41.1" height="36" fill="#b33a22"/>
+      <rect x="426.6" y="30" width="10.4" height="36" fill="#82827a"/>
+      <rect x="437.0" y="30" width="223.3" height="36" fill="#313449"/>
+      <text x="447.0" y="53" style="fill:#fff">364 done</text>
+      <rect x="660.3" y="30" width="49.7" height="36" fill="#eeeef2"/>
+      <rect x="10" y="84" width="12" height="12" fill="#c4c5d0" stroke="#a3a5b5" stroke-width=".5"/><text x="28" y="94">64 to do</text>
+      <rect x="120" y="84" width="12" height="12" fill="#a3a5b5" stroke="#a3a5b5" stroke-width=".5"/><text x="138" y="94">60 in progress</text>
+      <rect x="270" y="84" width="12" height="12" fill="#b33a22" stroke="#a3a5b5" stroke-width=".5"/><text x="288" y="94" class="acc b">67 in an active code stage</text>
+      <rect x="500" y="84" width="12" height="12" fill="#eeeef2" stroke="#a3a5b5" stroke-width=".5"/><text x="518" y="94">81 canceled</text>
+      <rect x="10" y="104" width="12" height="12" fill="#82827a" stroke="#a3a5b5" stroke-width=".5"/><text x="28" y="114">17 blocked or awaiting a decision</text>
+      <text x="120" y="172" text-anchor="end" class="m">testing</text><rect x="130" y="160" width="160" height="16" fill="#b33a22"/><text x="296" y="172" class="m">8</text>
+      <text x="120" y="194" text-anchor="end" class="m">fixing</text><rect x="130" y="182" width="380" height="16" fill="#b33a22"/><text x="516" y="194" class="m">19</text>
+      <text x="120" y="216" text-anchor="end" class="m">in review</text><rect x="130" y="204" width="380" height="16" fill="#b33a22"/><text x="516" y="216" class="m">19</text>
+      <text x="120" y="238" text-anchor="end" class="m">merging</text><rect x="130" y="226" width="200" height="16" fill="#b33a22"/><text x="336" y="238" class="m">10</text>
+      <text x="120" y="260" text-anchor="end" class="m">prod check</text><rect x="130" y="248" width="220" height="16" fill="#b33a22"/><text x="356" y="260" class="m">11</text>
+      <text x="10" y="148" class="hdr">THE 67 IN AN ACTIVE CODE STAGE</text>
+    </svg></div>
+    <figcaption>Every card on the task board by status, snapshot 29 October 2026 11:26 UTC; rust marks the 67 the gates watch move by move. Source: board list per status, read-only (numbers.json cards_total).</figcaption>
+  </figure>
+  <p>I give every code card the same six stages, from "in progress" through testing, review, merging and a production check to "done". When an agent tries to move a card, a hook I wrote, a small program that runs before the command, reads the card first and can refuse. Think of a turnstile that opens only for a receipt. My hook refuses five kinds of move:</p>
+  <figure>
+    <div class="wide"><svg viewBox="0 0 720 100" width="100%" role="img" aria-label="Six stages of a code card; review and done need executed evidence"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs><rect x="10" y="30" width="100" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="60.0" y="52.0" text-anchor="middle">in progress</text><line x1="110" y1="48" x2="128" y2="48" stroke="#5d6076" marker-end="url(#a)"/><rect x="128" y="30" width="100" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="178.0" y="52.0" text-anchor="middle">testing</text><line x1="228" y1="48" x2="246" y2="48" stroke="#5d6076" marker-end="url(#a)"/><rect x="246" y="30" width="100" height="36" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="296.0" y="52.0" text-anchor="middle">in review</text><line x1="346" y1="48" x2="364" y2="48" stroke="#5d6076" marker-end="url(#a)"/><text x="296" y="20" class="mono" text-anchor="middle">needs executed:</text><rect x="364" y="30" width="100" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="414.0" y="52.0" text-anchor="middle">merging</text><line x1="464" y1="48" x2="482" y2="48" stroke="#5d6076" marker-end="url(#a)"/><rect x="482" y="30" width="100" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="532.0" y="52.0" text-anchor="middle">prod check</text><line x1="582" y1="48" x2="600" y2="48" stroke="#5d6076" marker-end="url(#a)"/><rect x="600" y="30" width="100" height="36" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="650.0" y="52.0" text-anchor="middle">done</text><text x="650" y="20" class="mono" text-anchor="middle">needs executed:</text><text x="10" y="92" class="mono">one stage forward per move; backward moves, blocked and canceled are always allowed</text></svg></div>
+    <figcaption>The stage path the hook enforces for a code card. Rust stages refuse the move unless the card cites a command the execution log shows ran with exit 0. Source: the task-gate hook's stage table, October 2026; no counts.</figcaption>
+  </figure>
+  <ul>
+    <li><strong>Skipping a stage.</strong> One step forward at a time.</li>
+    <li><strong>Review or done with no executed evidence.</strong> The card needs a comment listing commands, and each must match a command that ran and exited cleanly in a log that a separate hook writes as each command runs. The agent's own words do not count.</li>
+    <li><strong>A move hidden inside a loop</strong>, where the hook cannot see which card is moving. Before this check existed, nine cards reached review or done that way with no check at all.</li>
+    <li><strong>"Blocked" with no exit</strong>, meaning no named event that would unblock it.</li>
+    <li><strong>A user-facing agent change with no live test in Slack.</strong></li>
+  </ul>
+  <figure>
+    <div class="fig-k">How one move is checked</div>
+    <div class="wide"><svg viewBox="0 0 720 250" width="100%" role="img" aria-label="An agent's move goes through the task gate hook, which checks the card against the execution log written by a second hook">
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs>
+      <rect x="10" y="40" width="150" height="48" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="85" y="60" text-anchor="middle" class="b">agent session</text><text x="85" y="77" text-anchor="middle" class="m">moves a card</text>
+      <line x1="160" y1="64" x2="198" y2="64" stroke="#5d6076" marker-end="url(#ah)"/>
+      <rect x="200" y="28" width="180" height="72" rx="4" fill="#fbf1ee" stroke="#b33a22"/><text x="290" y="52" text-anchor="middle" class="b">task gate</text><text x="290" y="70" text-anchor="middle" class="m">a hook, runs first</text><text x="290" y="86" text-anchor="middle" class="m">reads card + comment</text>
+      <line x1="380" y1="64" x2="558" y2="64" stroke="#5d6076" marker-end="url(#ah)"/><text x="470" y="56" text-anchor="middle" class="m">allow</text>
+      <rect x="560" y="40" width="150" height="48" rx="4" fill="#ffffff" stroke="#1c1f2e"/><text x="635" y="60" text-anchor="middle" class="b">card moves</text><text x="635" y="77" text-anchor="middle" class="m">one stage forward</text>
+      <path d="M240,100 L240,128 L85,128 L85,92" fill="none" stroke="#b33a22" marker-end="url(#ah)"/>
+      <text x="96" y="146" class="m acc">refused, with the reason</text>
+      <rect x="10" y="180" width="150" height="48" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="85" y="200" text-anchor="middle">every command</text><text x="85" y="217" text-anchor="middle" class="m">any session</text>
+      <line x1="160" y1="204" x2="198" y2="204" stroke="#5d6076" marker-end="url(#ah)"/>
+      <rect x="200" y="180" width="180" height="48" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="290" y="200" text-anchor="middle">execution logger</text><text x="290" y="217" text-anchor="middle" class="m">second hook, as it runs</text>
+      <line x1="380" y1="204" x2="418" y2="204" stroke="#5d6076" marker-end="url(#ah)"/>
+      <rect x="420" y="180" width="140" height="48" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="490" y="200" text-anchor="middle">execution log</text><text x="490" y="217" text-anchor="middle" class="m">command · exit code</text>
+      <path d="M490,178 L490,140 L340,140 L340,102" fill="none" stroke="#5d6076" stroke-dasharray="4 3" marker-end="url(#ah)"/>
+      <text x="346" y="132" class="m">cited commands must match</text>
+      <text x="580" y="122" class="hdr">REFUSES</text>
+      <text x="580" y="140" class="m">skipped stage</text>
+      <text x="580" y="156" class="m">no run evidence</text>
+      <text x="580" y="172" class="m">move in a loop</text>
+      <text x="580" y="188" class="m">blocked, no exit</text>
+      <text x="580" y="204" class="m">agent change,</text>
+      <text x="580" y="218" class="m">no Slack test</text>
+    </svg></div>
+    <figcaption>The mechanism behind the turnstile. The model never sees the decision logic; two hooks and a log do. Source: the task-gate and execution-logging hooks as configured in October 2026; no counts.</figcaption>
+  </figure>
+  <figure>
+    <div class="canvas-wrap" style="height:280px"><canvas id="denials"></canvas></div>
+    <figcaption>Moves and comments refused by the two task hooks, by reason, 5 to 29 October 2026. Source: the hooks' own denial telemetry. The evidence count here (45) is lower than the 57 in the text because the text counts from 2 October in the decision log.</figcaption>
+  </figure>
+  <p>From 2 to 29 October the evidence check refused 57 of 693 moves, and nobody used the off switch. I let the model propose, and I let plain code that answers the same way every time own the gate. A well-written paragraph no longer moves a card on its own. I list the gaps that remain in section 06.</p>
+  <figure>
+    <div class="fig-k">What the evidence check decided</div>
+    <div class="wide"><svg viewBox="0 0 720 200" width="100%" role="img" aria-label="693 moves: 636 allowed, 57 refused; of the allowed, a stricter shadow rule flags 539">
+      <text x="10" y="18" class="hdr">693 MOVES TO REVIEW OR DONE, 2 TO 29 OCTOBER</text>
+      <rect x="10" y="28" width="642.3" height="34" fill="#313449"/><text x="20" y="50" style="fill:#fff">636 allowed</text>
+      <rect x="652.3" y="28" width="57.7" height="34" fill="#b33a22"/><text x="681" y="50" text-anchor="middle" style="fill:#fff" class="b">57</text>
+      <text x="710" y="80" text-anchor="end" class="m acc">57 refused: 55 at review, 2 at done</text>
+      <text x="10" y="112" class="hdr">THE 636 ALLOWED, AS A STRICTER SHADOW RULE READS THEM</text>
+      <rect x="10" y="122" width="544.4" height="34" fill="#fbf1ee" stroke="#b33a22"/><text x="20" y="144">539 rest on weaker evidence than the change called for</text>
+      <rect x="554.4" y="122" width="97.9" height="34" fill="#313449"/><text x="603" y="144" text-anchor="middle" style="fill:#fff">97</text>
+      <text x="10" y="180" class="m">the shadow rule only watches; it refuses nothing yet</text>
+    </svg></div>
+    <figcaption>Every review or done move the evidence check decided, and how the silent stricter rule reads the allowed ones. Both bars on one scale. Source: the gate's decision log, 2 to 29 October 2026 (693 rows).</figcaption>
+  </figure>
+
+  <h2>02 Comments a busy person can scan</h2>
+  <p>I make every card comment follow one short template: a verdict in 12 words or fewer, then labelled lines for evidence, next step, owner and blocker. A second hook of mine rejects anything else. From 5 to 29 October it sent 341 comments back for a rewrite.</p>
+  <p>One line matters more than the rest: when a reviewer agent files a finding, I have it name the earlier finding it replaces. If those links are right, code can list a card's open problems without anyone re-reading the thread. Nothing checks the links yet.</p>
+
+  <h2>03 Push the event to the owner</h2>
+  <p>I do not let a waiting agent poll, because left alone it keeps asking GitHub, the board and Slack "anything new?" and spends their working memory on the answer "no". So I run one small script per source, a watcher, that does the asking and pushes each new event to a single session.</p>
+  <p>That session is my Coordinator, the agent I use to run live work and hand each topic to a builder, another agent session that writes the code. On 28 and 29 October my board watcher sent it 152 card changes and my GitHub watcher sent 28 reviews and comments. An event is marked sent only after delivery succeeds, so a crash causes a repeat, not a gap.</p>
+  <figure>
+    <div class="wide"><svg viewBox="0 0 720 245" width="100%" role="img" aria-label="Watchers push GitHub, board and Slack events to the Coordinator, which hands work to builders; the manager gets none"><defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs><rect x="10" y="20" width="150" height="40" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="85.0" y="44.0" text-anchor="middle">GitHub reviews</text><line x1="160" y1="40" x2="198" y2="40" stroke="#5d6076" marker-end="url(#a)"/><rect x="200" y="20" width="130" height="40" rx="4" fill="#fdf8f4" stroke="#a3a5b5"/><text x="265.0" y="44.0" text-anchor="middle">GitHub watcher</text><rect x="10" y="82" width="150" height="40" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="85.0" y="106.0" text-anchor="middle">task board</text><line x1="160" y1="102" x2="198" y2="102" stroke="#5d6076" marker-end="url(#a)"/><rect x="200" y="82" width="130" height="40" rx="4" fill="#fdf8f4" stroke="#a3a5b5"/><text x="265.0" y="106.0" text-anchor="middle">board watcher</text><rect x="10" y="144" width="150" height="40" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="85.0" y="168.0" text-anchor="middle">reviewer Slack thread</text><line x1="160" y1="164" x2="198" y2="164" stroke="#5d6076" marker-end="url(#a)"/><rect x="200" y="144" width="130" height="40" rx="4" fill="#fdf8f4" stroke="#a3a5b5"/><text x="265.0" y="168.0" text-anchor="middle">Slack watcher</text><rect x="400" y="60" width="140" height="46" rx="4" fill="#eeeef2" stroke="#1c1f2e"/><text x="470.0" y="87.0" text-anchor="middle">Coordinator</text><line x1="330" y1="40" x2="398" y2="76" stroke="#5d6076" marker-end="url(#a)"/><line x1="330" y1="102" x2="398" y2="83" stroke="#5d6076" marker-end="url(#a)"/><line x1="330" y1="164" x2="398" y2="98" stroke="#5d6076" stroke-dasharray="3 3" marker-end="url(#a)"/><text x="200" y="204" class="mono">dashed: or the comms owner</text><rect x="590" y="60" width="120" height="46" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="650.0" y="87.0" text-anchor="middle">builder session</text><line x1="540" y1="83" x2="588" y2="83" stroke="#5d6076" marker-end="url(#a)"/><rect x="400" y="160" width="140" height="40" rx="4" fill="#ffffff" stroke="#b33a22" stroke-dasharray="4 3"/><text x="470.0" y="184.0" text-anchor="middle">manager session</text><text x="470" y="222" class="mono" text-anchor="middle">receives no watcher events</text><text x="470" y="236" class="mono" text-anchor="middle">(start-of-day check fails if it does)</text>
+<text x="352" y="40" class="m acc b">28</text><text x="354" y="86" class="m acc b">152</text></svg></div>
+    <figcaption>One watcher per source does the polling and pushes each event to the owning session. Delivery is marked only after it succeeds, and each event carries an id so a repeat is dropped. Rust labels: events delivered 28 to 29 October (GitHub 28, board 152). Source: the watchers' send records and state.</figcaption>
+  </figure>
+  <p>Back to that October morning. My first fix pointed the watchers at the new manager session, the one that keeps the board and talks to people. Its turn filled with notices marked "no action requested", and it did exactly that: it acknowledged them. The manager owns no code, so a notice there produced acknowledgement, not progress.</p>
+  <p>Now a start-of-day check I added fails if any watcher points at the manager, or if nothing watches GitHub.</p>
+  <figure>
+    <div class="fig-k">That October morning, before and after</div>
+    <div class="wide"><svg viewBox="0 0 720 200" width="100%" role="img" aria-label="Before: events went to yesterday's manager and GitHub was unwatched. First fix: today's manager acknowledged notices. Now: events go to the Coordinator">
+      <defs><marker id="ab" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#5d6076"/></marker></defs>
+      <text x="10" y="20" class="hdr">BEFORE</text><rect x="10" y="34" width="200" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="110" y="57" text-anchor="middle">Slack thread watcher</text><line x1="110" y1="70" x2="110" y2="98" stroke="#5d6076" marker-end="url(#ab)"/><rect x="10" y="100" width="200" height="36" rx="4" fill="#fdf8f4" stroke="#a3a5b5" stroke-dasharray="4 3"/><text x="110" y="123" text-anchor="middle" class="b">yesterday's manager</text><text x="10" y="162" class="m">nobody was reading it</text><text x="10" y="180" class="m acc">GitHub reviews: no watcher</text>
+      <line x1="216" y1="118" x2="244" y2="118" stroke="#5d6076" marker-end="url(#ab)"/>
+      <text x="250" y="20" class="hdr">FIRST FIX</text><rect x="250" y="34" width="200" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="350" y="57" text-anchor="middle">all watchers</text><line x1="350" y1="70" x2="350" y2="98" stroke="#5d6076" marker-end="url(#ab)"/><rect x="250" y="100" width="200" height="36" rx="4" fill="#fdf8f4" stroke="#a3a5b5" stroke-dasharray="4 3"/><text x="350" y="123" text-anchor="middle" class="b">today's manager</text><text x="250" y="162" class="m">owns no code</text><text x="250" y="180" class="m acc">acknowledged, no progress</text>
+      <line x1="456" y1="118" x2="484" y2="118" stroke="#5d6076" marker-end="url(#ab)"/>
+      <text x="490" y="20" class="hdr">NOW</text><rect x="490" y="34" width="200" height="36" rx="4" fill="#ffffff" stroke="#a3a5b5"/><text x="590" y="57" text-anchor="middle">one watcher per source</text><line x1="590" y1="70" x2="590" y2="98" stroke="#5d6076" marker-end="url(#ab)"/><rect x="490" y="100" width="200" height="36" rx="4" fill="#fdf8f4" stroke="#1c1f2e"/><text x="590" y="123" text-anchor="middle" class="b">Coordinator</text><text x="490" y="162" class="m">hands it to the builder</text><text x="490" y="180" class="m">start-of-day check guards it</text>
+    </svg></div>
+    <figcaption>The routing fix in three steps. Dashed = a session that could not act on the event. Source: the incident as described in this section; no counts.</figcaption>
+  </figure>
+
+    <div class="takeaways">
+    <div class="k">Key takeaways</div>
+    <ol>
+      <li>A card reaches review or done only on a command the log shows ran; in October that refused 57 of 693 moves.</li>
+      <li>Each event goes to the session that owns the work, never to the manager.</li>
+      <li>The gate proves something ran, not that the right thing ran: 12 of 636 allowed moves rested on a live test.</li>
+    </ol>
+  </div>
+
+<h2>04 A report is evidence, not a story</h2>
+  <p>I have my sessions report to each other the same way. A report is a sentence for humans, then structured data: a verdict per request, and for every "done" at least one piece of evidence, the command, file or link plus what was observed. A guard I wrote rejects a "done" with no evidence.</p>
+  <p>I close every report with four fields: merged, pushed, deployed, approved, each yes, no or not applicable. "Shipped" can mean any of the three. A field can still be wrong, but it cannot be left vague.</p>
+
+  <h2>05 Silence is not consent</h2>
+  <p>I record a worker that misses its own deadline, or ends in an error, as "no report". Everything it was assigned goes back to unchecked, and my Coordinator nudges that same worker rather than starting a second one. A quiet agent may be inside a twenty-minute test run, and two agents writing one branch is a worse bug than a slow one.</p>
+
+  <h2>06 What still goes wrong</h2>
+  <p>I know my evidence check proves only that something ran. It does not prove the right thing ran. Of the 636 moves it allowed from 2 to 29 October, only 12 rested on a live test of the running system. The rest rested on a pull request's state, an automated test run or a unit test. A stricter rule, running silently beside the real one, flagged 539 of those moves as resting on weaker evidence than the change called for. Some are real gaps and some are not. Until I sort them, it only watches.</p>
+  <figure>
+    <div class="canvas-wrap" style="height:240px"><canvas id="tiers"></canvas></div>
+    <figcaption>What the 636 allowed review and done moves actually rested on, 2 to 29 October 2026, strongest evidence per move. Source: the gate's decision log.</figcaption>
+  </figure>
+  <p>I also built the check to let a move through when it cannot read the card at all: jamming honest work is worse than an occasional miss; in the same window that happened six times. And on 29 October, 488 cards sat in backlog. The gates check each move. They do not decide which card matters.</p>
+
+  <h2>The takeaway</h2>
+  <p>I read one published result as pointing the same way. In the <a href="https://arxiv.org/abs/2407.01489">Agentless study</a> (Xia and colleagues, 2024), on a benchmark of 300 real GitHub issues, picking among the same candidate fixes by majority vote solved 77. Filtering them with tests that were actually run solved 96. On that benchmark, filtering on executed tests beat voting. It does not prove my gate works; my own numbers above are that test, and they are mixed.</p>
+  <p class="pull">This is how I run agents: I treat every status as a hypothesis and every artifact as the fact. I put the gate in code, where a fluent paragraph cannot talk past it. I send each event to the one session that can act on it. And when an agent goes quiet, I write down what that is: no report.</p>
+</main>
+
+<footer class="site"><div class="wrap">
+  Provenance · every figure re-derived on 29 October 2026, read-only.<br>
+  Card counts: task board list per status, snapshot 29 Oct 11:26 UTC. Gate decisions: the done gate's decision log, 2 to 29 Oct (693 rows).
+  Refusals by reason: the hooks' weekly denial telemetry, 5 to 29 Oct. Watcher events: the board watcher's send records and the GitHub
+  watcher's state, 28 to 29 Oct. Agentless figures: Xia et al., arXiv 2407.01489, Table 4 (SWE-bench Lite, GPT-4o).
+</div></footer>
+<script>
+const ink='#313449', mid='#82827a', light='#c4c5d0', rust='#b33a22';
+Chart.defaults.font.family='Inter, system-ui, sans-serif'; Chart.defaults.color='#5d6076';
+const grid={color:'#e6e6ea'};
+new Chart(document.getElementById('denials'),{type:'bar',data:{labels:['comment not in template (2nd hook)','skipped a stage','"blocked" with no exit','move hidden in a loop','no executed evidence','agent change, no Slack test','decision ask missing fields'],
+ datasets:[{data:[341,114,51,46,45,25,6],backgroundColor:[light,ink,ink,ink,rust,ink,ink]}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid,beginAtZero:true},y:{grid:{display:false}}}}});
+new Chart(document.getElementById('tiers'),{type:'bar',data:{labels:['pull request state','automated check run','unit test','local image run','live test of running system','unclassified'],
+ datasets:[{data:[218,216,180,2,12,8],backgroundColor:[mid,mid,mid,mid,rust,light]}]},
+ options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid,beginAtZero:true},y:{grid:{display:false}}}}});
+</script>
+</body>
+</html>
