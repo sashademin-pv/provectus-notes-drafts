@@ -77,7 +77,7 @@
 <h1>I don't call an agent done when its tests are green</h1>
 <p class="dek">How I develop, test and debug an LLM agent whose answers a reinsurance payout can depend on: I diff the tool calls, run everything twice, and ship every fix with the query it fixes.</p>
 <div class="byline">Sasha Demin · Provectus · 2026-11-09 · 6 min read</div>
-<div class="takeaway"><b>Key takeaway</b> I do not call an agent done because its tests pass; I call it done when the requests it makes match what the question asked for, in every run. I get there by diffing requests between versions, running everything twice, and keeping the failing query of each fix in the test set.</div>
+<p class="pull">TL;DR: I do not call an agent done because its tests pass; I call it done when the requests it makes match what the question asked for, in every run. I get there by diffing requests between versions, running everything twice, and keeping the failing query of each fix in the test set.</p>
 <p>I ship LLM agents to clients who act on their answers, and I do not treat a green test suite as the end of the work. My working definition of done is narrower: the image I ship, asked the same question twice, asks the database for the same things both times, and those requests match what the question asked for. One of my agents gave the right answer by the wrong path, and the scorer passed it.</p>
 <div class="kpis">
 <div class="kpi"><b>17 / 115</b><small>questions passed in both runs, mid-September baseline; 0 of 39 number checks</small></div>
