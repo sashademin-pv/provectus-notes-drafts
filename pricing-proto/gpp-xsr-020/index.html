@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pricing memo · GPP-XSR-020 (synthetic prototype)</title>
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Pricing memo · GPP-XSR-020 (synthetic prototype)">
+<meta property="og:description" content="Excess-rain indication: premium $269,615, expected loss $168,509, rate on line 2.70%. Step 7 of 9, pick the expected loss.">
+<meta property="og:image" content="https://sashademin-pv.github.io/provectus-notes-drafts/pricing-proto/chart.png">
+<meta property="og:url" content="https://sashademin-pv.github.io/provectus-notes-drafts/pricing-proto/gpp-xsr-020/">
+
+<style>
+:root{--fg:#1d1c1d;--mu:#616061;--ln:#e8e8e8;--bg:#f8f8f8;--side:#3f0e40;--grn:#007a5a;--blu:#1264a3;--amb:#e8912d;--red:#e01e5a;--gry:#c4c4c4}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.46 Lato,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif}
+.app{display:grid;grid-template-columns:minmax(380px,1fr) minmax(560px,1.35fr);height:100vh}
+.pane{overflow:auto;background:#fff;border-right:1px solid var(--ln)}
+.top{position:sticky;top:0;background:var(--side);color:#fff;font-weight:700;padding:10px 16px;font-size:14px;display:flex;justify-content:space-between;z-index:2}
+.top small{font-weight:400;opacity:.75}
+.msg{display:flex;gap:10px;padding:14px 16px}.av{width:36px;height:36px;border-radius:6px;background:#7c3aed;color:#fff;font-weight:700;display:grid;place-items:center;flex:none}
+.who{font-weight:900}.who small{font-weight:400;color:var(--mu);margin-left:6px;font-size:12px}
+.tagapp{font-size:10px;background:#ddd;border-radius:3px;padding:1px 4px;margin-left:4px;font-weight:700;color:#555}
+.h{font-weight:900;font-size:16px;margin:4px 0 2px}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 14px;margin:8px 0;font-size:13px}.kv b{display:block;font-size:15px}.kv span{color:var(--mu)}
+.att{border-left:4px solid var(--amb);background:#fff8ee;padding:8px 10px;margin:8px 0;font-size:14px;border-radius:0 6px 6px 0}
+.att li{margin:2px 0}.att ul{margin:4px 0 0 18px;padding:0}
+.card{border:1px solid var(--ln);border-radius:8px;display:flex;gap:10px;align-items:center;padding:10px 12px;margin-top:8px;cursor:pointer;background:#fff}
+.card:hover{border-color:#bbb}.ci{width:34px;height:34px;border-radius:6px;background:#e8f5fa;display:grid;place-items:center;font-size:18px}
+.card b{display:block}.card span{font-size:12px;color:var(--mu)}
+.btns{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}.btn{border:1px solid #bbb;border-radius:4px;padding:5px 12px;font-weight:700;font-size:13px;background:#fff;cursor:pointer}
+.btn.p{background:var(--grn);color:#fff;border-color:var(--grn)}.btn.d{color:var(--red);border-color:#e7b3c3}
+.ctx{font-size:12px;color:var(--mu);margin-top:8px}
+/* canvas */
+.cv{max-width:820px;margin:0 auto;padding:26px 34px 60px}
+.cv h1{font-size:26px;margin:0 0 2px;font-weight:900}.cv .sub{color:var(--mu);font-size:13px;margin-bottom:14px}
+.cv h2{font-size:18px;margin:26px 0 8px;font-weight:900}
+.flow{display:flex;gap:0;margin:8px 0 4px}.st{flex:1;text-align:center;font-size:11.5px;color:var(--mu);position:relative}
+.st .dot{width:22px;height:22px;border-radius:50%;margin:0 auto 4px;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;background:var(--gry);position:relative;z-index:1}
+.st::before{content:"";position:absolute;top:11px;left:-50%;width:100%;height:3px;background:var(--gry)}.st:first-child::before{display:none}
+.st.ok .dot,.st.ok::before{background:var(--grn)}.st.now .dot{background:var(--amb);box-shadow:0 0 0 4px #e8912d33}.st.now::before{background:var(--grn)}
+.st.now{color:var(--fg);font-weight:700}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.grp{border:1px solid var(--ln);border-radius:8px;padding:10px 12px}.grp h3{margin:0 0 6px;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--mu)}
+.row{display:flex;justify-content:space-between;gap:8px;font-size:13.5px;padding:3px 0;border-bottom:1px dashed #eee}.row:last-child{border:0}
+.row em{font-style:normal;font-weight:700;text-align:right}.edit{outline:none;border-radius:3px}.edit:focus{background:#fff6d6;box-shadow:0 0 0 2px #e8912d66}
+.call{border-radius:8px;padding:10px 14px;margin:10px 0;font-size:14px}.call.w{background:#fff3e0;border:1px solid #f5d5a8}.call.i{background:#eef6fc;border:1px solid #c8e1f3}.call.r{background:#fdecf1;border:1px solid #f4bdcd}
+table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--ln)}th{color:var(--mu);font-weight:700;font-size:12px}
+.pill{font-size:11px;font-weight:700;border-radius:10px;padding:1px 8px}.pill.cur{background:#e3f4ec;color:var(--grn)}.pill.old{background:#eee;color:#777}.pill.dr{background:#fff3e0;color:#b45309}
+.leg{display:flex;gap:14px;font-size:12px;color:var(--mu);margin-top:4px}.leg i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.toast{position:fixed;bottom:16px;right:16px;background:#1d1c1d;color:#fff;padding:8px 14px;border-radius:6px;font-size:13px;opacity:0;transition:.2s}.toast.on{opacity:1}
+.note{font-size:12px;color:var(--mu)}
+@media(max-width:1000px){.app{grid-template-columns:1fr;height:auto}.cols,.kv{grid-template-columns:1fr 1fr}}
+</style></head><body>
+<div class="app">
+
+<!-- LEFT: the Slack message -->
+<div class="pane">
+ <div class="top"><span># pricing-desk</span><small>prototype B · memo as canvas</small></div>
+ <div class="msg"><div class="av">Ari</div><div style="flex:1">
+  <div class="who">Ari<span class="tagapp">APP</span><small>10:42</small></div>
+  <div class="h">Grosse Pointe Park · excess rain · option B</div>
+  <div style="font-size:13px;color:var(--mu)">Max 1-day rainfall · 25-yr attach → 200-yr exhaust · non-binding indication</div>
+  <div class="kv">
+   <div><span>Technical premium</span><b>$269,615</b></div>
+   <div><span>Expected loss</span><b>$168,509</b></div>
+   <div><span>Rate on line</span><b>2.70%</b></div>
+  </div>
+  <div class="att"><b>Needs your attention (2)</b><ul>
+   <li><b>Pick the expected loss</b>: estimates range from $93.8k to $222.2k.</li>
+   <li><b>Inception date is open</b>: the broker hasn't stated one.</li></ul></div>
+  <div class="card" onclick="flash('Opens the canvas in the Slack side panel')"><div class="ci">📄</div><div><b>Pricing memo · GPP-XSR-020 · v3</b><span>Canvas · step 7 of 9 · edited 10:41 by Ari</span></div></div>
+  <div class="btns"><button class="btn p" onclick="flash('Opens the canvas at “Pick the expected loss”')">Open memo</button><button class="btn" onclick="flash('Approve unlocks after the EL pick')">Approve</button><button class="btn d" onclick="flash('Opens the reason box')">Send back</button></div>
+  <div class="ctx">This message holds only the summary. Terms, flow, chart and versions live in the canvas, and your edits there become v4.</div>
+ </div></div>
+</div>
+
+<!-- RIGHT: the canvas -->
+<div class="pane" style="background:#fff">
+ <div class="top" style="background:#fff;color:var(--fg);border-bottom:1px solid var(--ln)"><span>📄 Pricing memo · GPP-XSR-020</span><small style="color:var(--mu)" id="saved">v3 · saved 10:41</small></div>
+ <div class="cv">
+  <h1>Grosse Pointe Park: excess rainfall cover</h1>
+  <div class="sub">City of Grosse Pointe Park, MI · broker FloodFlash · USD · indication only, not a quote</div>
+
+  <h2>Where we are</h2>
+  <div class="flow">
+   <div class="st ok"><div class="dot">✓</div>E-mail filed</div>
+   <div class="st ok"><div class="dot">✓</div>Structure</div>
+   <div class="st ok"><div class="dot">✓</div>Stage</div>
+   <div class="st ok"><div class="dot">✓</div>Terms</div>
+   <div class="st ok"><div class="dot">✓</div>Data</div>
+   <div class="st ok"><div class="dot">✓</div>Price</div>
+   <div class="st now"><div class="dot">7</div>Pick EL</div>
+   <div class="st"><div class="dot">8</div>Review</div>
+   <div class="st"><div class="dot">9</div>Indication</div>
+  </div>
+  <div class="call w"><b>Stopped at step 7.</b> A person picks the expected loss. Next: an independent review, then approval.</div>
+
+  <h2>Terms <span class="note" style="font-weight:400">· click a value to edit it</span></h2>
+  <div class="cols">
+   <div class="grp"><h3>Cover</h3>
+    <div class="row">Index<em>Max 1-day rain</em></div>
+    <div class="row">Station<em>GHCN USC00203477</em></div>
+    <div class="row">Season<em>Jan–Dec</em></div>
+    <div class="row">Inception<em class="edit" contenteditable>open</em></div></div>
+   <div class="grp"><h3>Layer</h3>
+    <div class="row">Attach<em class="edit" contenteditable>94.4 mm</em></div>
+    <div class="row">Exhaust<em class="edit" contenteditable>127.4 mm</em></div>
+    <div class="row">Payout shape<em>Linear</em></div>
+    <div class="row">Return periods<em>25 → 200 yr</em></div></div>
+   <div class="grp"><h3>Money</h3>
+    <div class="row">Limit, per storm<em class="edit" contenteditable>$10,000,000</em></div>
+    <div class="row">Annual cap<em>$10,000,000</em></div>
+    <div class="row">Reinstatements<em>0</em></div>
+    <div class="row">Multiple<em>× 1.6</em></div></div>
+  </div>
+
+  <h2>Does the rain reach the layer?</h2>
+  <div class="note">How much rain falls in one day, by how rare the storm is (NOAA Atlas 14), against our layer. The 2021 storm is marked.</div>
+  <svg id="ch" viewBox="0 0 760 300" style="width:100%;margin-top:6px"></svg>
+  <div class="leg"><span><i style="background:var(--gry)"></i>below attach, no payout</span><span><i style="background:var(--amb)"></i>inside the layer, partial payout</span><span><i style="background:var(--red)"></i>above exhaust, full limit</span></div>
+  <div class="call r"><b>2021 storm: 165.1 mm.</b> It cleared the exhaust by 30% and would have paid the full $10M. It is the only paying year in 45.</div>
+
+  <h2>Pick the expected loss</h2>
+  <table><tr><th>Method</th><th>Expected loss</th><th>vs primary</th><th></th></tr>
+   <tr><td>Gauge fit (0070), primary</td><td><b>$168,509</b></td><td>1.00×</td><td><button class="btn p" onclick="pick(this)">Pick</button></td></tr>
+   <tr><td>NOAA Atlas 14 curve</td><td>$164,446</td><td>0.98×</td><td><button class="btn" onclick="pick(this)">Pick</button></td></tr>
+   <tr><td>Gauge fit, alternate</td><td>$201,214</td><td>1.19×</td><td><button class="btn" onclick="pick(this)">Pick</button></td></tr>
+   <tr><td>PRISM grid fallback</td><td>$93,776</td><td>0.56×</td><td><button class="btn" onclick="pick(this)">Pick</button></td></tr>
+   <tr><td>Burning cost, 45 yr</td><td>$222,222</td><td>1.32×</td><td><button class="btn" onclick="pick(this)">Pick</button></td></tr></table>
+  <div class="call i">The burning cost rests on one paying year (2021), so it's shown but flagged as unusable.</div>
+
+  <h2>Versions</h2>
+  <table><tr><th>Version</th><th>What changed</th><th>By</th><th>When</th><th></th></tr>
+   <tr id="v4" style="display:none"><td>v4</td><td id="v4t">Your edits</td><td>Sasha</td><td>now</td><td><span class="pill dr">draft</span></td></tr>
+   <tr><td>v3</td><td>Priced: 5 expected-loss estimates</td><td>Ari (engine)</td><td>10:41</td><td><span class="pill cur">current</span></td></tr>
+   <tr><td>v2</td><td>Terms confirmed: attach 94.4, exhaust 127.4 mm</td><td>Wasi</td><td>10:33</td><td><span class="pill old">locked</span></td></tr>
+   <tr><td>v1</td><td>Drafted from the broker e-mail</td><td>Ari (reads)</td><td>10:30</td><td><span class="pill old">locked</span></td></tr></table>
+  <div class="note" style="margin-top:14px">Prototype B. All numbers come from deal 20 (pricing.json, Atlas 14 PFDS); the times and names are illustrative.</div>
+ </div>
+</div>
+</div>
+<div class="toast" id="t"></div>
+<script>
+const t=document.getElementById('t');function flash(s){t.textContent=s;t.classList.add('on');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('on'),1800)}
+function draft(what){const r=document.getElementById('v4');r.style.display='';document.getElementById('v4t').textContent=what;document.getElementById('saved').textContent='v4 draft · saved just now'}
+document.querySelectorAll('.edit').forEach(e=>e.addEventListener('blur',()=>{draft('Edited '+e.parentNode.firstChild.textContent.trim()+' → '+e.textContent.trim());flash('Saved as v4 draft')}));
+function pick(b){document.querySelectorAll('table button').forEach(x=>x.classList.remove('p'));b.classList.add('p');const m=b.closest('tr').cells[0].textContent;draft('Picked the expected loss: '+m);
+ const s=document.querySelectorAll('.st');s[6].className='st ok';s[6].querySelector('.dot').textContent='✓';s[7].className='st now';flash('Step 7 done → review next')}
+// chart: Atlas 14 24-hr depth by return period vs layer
+const rp=[1,2,5,10,25,50,100,200,500,1000],mm=[52,59,72,84,101,115,130,146,168,186],A=94.4,X=127.4,EV=165.1;
+const W=760,H=300,L=50,R=20,T=16,B=40,ymax=200,y=v=>T+(H-T-B)*(1-v/ymax),bw=(W-L-R)/rp.length;let s='';
+for(let g=0;g<=200;g+=50)s+=`<line x1="${L}" x2="${W-R}" y1="${y(g)}" y2="${y(g)}" stroke="#eee"/><text x="${L-8}" y="${y(g)+4}" font-size="11" text-anchor="end" fill="#888">${g}</text>`;
+s+=`<rect x="${L}" y="${y(X)}" width="${W-L-R}" height="${y(A)-y(X)}" fill="#e8912d" opacity=".10"/>`;
+rp.forEach((r,i)=>{const v=mm[i],c=v<A?'#c4c4c4':v<X?'#e8912d':'#e01e5a',x=L+i*bw+bw*.18,w=bw*.64;
+ s+=`<rect x="${x}" y="${y(v)}" width="${w}" height="${y(0)-y(v)}" rx="3" fill="${c}"/><text x="${x+w/2}" y="${y(v)-5}" font-size="11" text-anchor="middle" fill="#444">${v}</text><text x="${x+w/2}" y="${H-B+16}" font-size="11" text-anchor="middle" fill="#666">${r} yr</text>`});
+[[A,'attach 94.4 mm'],[X,'exhaust 127.4 mm']].forEach(([v,l])=>s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#b45309" stroke-dasharray="5 4"/><text x="${L+4}" y="${y(v)-4}" font-size="11" fill="#b45309" font-weight="700">${l}</text>`);
+s+=`<line x1="${L}" x2="${W-R}" y1="${y(EV)}" y2="${y(EV)}" stroke="#e01e5a" stroke-width="1.5"/><text x="${L+4}" y="${y(EV)-5}" font-size="11" fill="#e01e5a" font-weight="700">2021 storm · 165.1 mm</text>`;
+s+=`<text x="${L}" y="${H-6}" font-size="11" fill="#888">rain in one day (mm), by how rare the storm is</text>`;document.getElementById('ch').innerHTML=s;
+</script></body></html>
